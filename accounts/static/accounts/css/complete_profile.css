@@ -1,0 +1,112 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    }
+
+        body{
+            background:#f4f7fb;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+            padding:20px;
+        }
+
+        .message{
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    color: white;
+}
+
+.success{
+    background: green;
+}
+
+.error{
+    background: red;
+}
+
+.warning{
+    background: orange;
+}
+
+        .profile-container{
+            width:100%;
+            max-width:500px;
+            background:white;
+            padding:40px;
+            border-radius:16px;
+            box-shadow:0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .profile-container h2{
+            text-align:center;
+            margin-bottom:10px;
+            color:#222;
+        }
+
+        .profile-container p{
+            text-align:center;
+            color:#666;
+            margin-bottom:30px;
+            font-size:14px;
+        }
+
+        .form-group{
+            margin-bottom:20px;
+        }
+
+        .form-group label{
+            display:block;
+            margin-bottom:8px;
+            font-weight:600;
+            color:#333;
+        }
+
+        .form-group input,
+        .form-group select{
+            width:100%;
+            padding:14px;
+            border:1px solid #ccc;
+            border-radius:10px;
+            outline:none;
+            font-size:15px;
+            transition:0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus{
+            border-color:#2563eb;
+        }
+
+        .profile-preview{
+            text-align:center;
+            margin-bottom:20px;
+        }
+
+        .profile-preview img{
+            width:120px;
+            height:120px;
+            border-radius:50%;
+            object-fit:cover;
+            border:4px solid #2563eb;
+        }
+
+        .submit-btn{
+            width:100%;
+            padding:15px;
+            border:none;
+            background:#2563eb;
+            color:white;
+            font-size:16px;
+            border-radius:10px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .submit-btn:hover{
+            background:#1d4ed8;
+        }

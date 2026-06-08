@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+</head>
+<body>
+    
+    <div class="navbar">
+        <div class="hamburger">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+            <rect y="4" width="24" height="2" fill="white"/>
+            <rect y="11" width="24" height="2" fill="white"/>
+            <rect y="18" width="24" height="2" fill="white"/>
+        </svg>
+        </div>
+        
+        <h2 class="name">NIIT Connect</h2>
+        
+        <div class="notification">
+            <a href="notifications.html">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2C10 2 8 4 8 6V7C8 10 7 11 5 13V14H19V13C17 11 16 10 16 7V6C16 4 14 2 12 2Z" fill="white"/>
+                    <circle cx="12" cy="18" r="2" fill="white"/>
+            </svg>
+            </a>
+        </div>
+        
+        <div class="profileicon">
+            <a href="/accounts/profile/">
+            <svg width="30" height="30" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4" fill="white"/>
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="white"/>
+            </svg>
+            </a>
+        </div>
+        
+    </div>
+
+    <aside class="sidebar">
+        
+        
+        
+    <ul class="menu">
+        <li><a href="#">Chats</a></li>
+        <li><a href="">Posts</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="/accounts/logout/">Logout</a></li>
+    </ul>
+
+    </aside>
+
+    <div class="feed-container">
+
+        <div class="create-post">
+
+            <form action="/posts/create/" method="POST">
+                {% csrf_token %}
+
+                <textarea
+                    name="content"
+                    placeholder="What's on your mind?"
+                    required
+                ></textarea>
+
+                <button type="submit">
+                    Post
+                </button>
+
+            </form>
+
+            
+
+        </div>
+
+
+        <div class="posts">
+
+            {% for post in posts %}
+
+            <div class="post-card">
+
+                <div class="post-header">
+
+                    <strong>
+                        {{ post.user.username }}
+                    </strong>
+
+                    <small>
+                        {{ post.created_at }}
+                    </small>
+
+                </div>
+
+                <div class="post-content">
+                  test  {{ post.content }}
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="post-card">
+                No posts yet.
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    
+
+    <script src="{% static 'js/dashboard.js' %}"></script>
+</body>
+
+</html>

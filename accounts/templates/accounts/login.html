@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
+</head>
+
+<body>
+
+    <form method="POST" class="login">
+
+        {% csrf_token %}
+
+        {% if messages %}
+        {% for message in messages %}
+        <p class="message {{message.tags}}">{{ message }}</p>
+         {% endfor %}
+        {% endif %}
+             
+              <svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background -->
+                    <rect width="100%" height="100%" fill="white"/>
+
+                    <!-- NIIT Text -->
+                    <text x="50%" y="75" text-anchor="middle"
+                    font-family="Arial, Helvetica, sans-serif"
+                    font-size="100"
+                    font-weight="900"
+                    fill="#0D0D4D">
+                    NIIT
+                    </text>
+                </svg>
+
+        <div class="title1">
+            <h3 class="title">Login here</h3>
+        </div>
+
+        <label for="username">Email</label>
+
+        <input type="email"
+               name="username"
+               id="username"
+               autocomplete="username"
+               placeholder="Email"
+               required>
+
+        <label for="password">Password</label>
+
+        <input type="password"
+               name="password"
+               id="password"
+               autocomplete="password"
+               placeholder="********"
+               required>
+
+        <button type="submit">
+            Login
+        </button>
+
+    </form>
+
+</body>
+
+</html>

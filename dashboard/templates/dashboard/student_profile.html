@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Profile</title>
+    <link rel="stylesheet" href="{% static 'dashboard/css/student_profile.css' %}">
+</head>
+<body>
+
+<div class="profile-container">
+
+    <div class="top-section">
+
+        {% if profile.profile_picture %}
+            <img src="{{ profile.profile_picture.url }}" class="profile-image">
+        {% else %}
+            <img src="{% static 'images/default.png' %}" class="profile-image">
+        {% endif %}
+
+        <h1>{{ student_user.username }}</h1>
+        <p>{{ student_user.email }}</p>
+
+    </div>
+
+    <div class="profile-info">
+
+        <div class="info-box">
+            <h3>Program</h3>
+            <p>{{ profile.program }}</p>
+        </div>
+
+        <div class="info-box">
+            <h3>Year</h3>
+            <p>{{ profile.year }}</p>
+        </div>
+
+        <div class="info-box">
+            <h3>Phone Number</h3>
+            <p>{{ profile.number }}</p>
+        </div>
+
+        <div class="info-box">
+            <h3>Bio</h3>
+            <p>{{ profile.bio }}</p>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

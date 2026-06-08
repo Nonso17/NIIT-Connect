@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'dashboard/css/admin.css' %}">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+      <h2 class="logo">NIIT Connect</h2>
+
+      <ul class="menu">
+        <li><a href="{% url 'admin_panel' %}">Dashboard</a></li>
+        <li><a href="{% url 'register_user' %}">Register User</a></li>
+        <li><a href="{% url 'manage_users' %}">Manage Users</a></li>
+        <li><a href="#">Posts</a></li>
+        <li><a href="/accounts/logout/">Logout</a></li>
+      </ul>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- Top Header -->
+        <div class="topbar">
+
+            <div>
+                <h1 class="dashboard-title">
+                  Admin Dashboard
+                </h1>
+
+                <p class="welcome-text">
+                  Welcome back, {{ request.user.username }}
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- Statistics Cards -->
+        <div class="dashboard-cards">
+
+            <div class="card">
+              <h3>Total Users</h3>
+              <p>{{ total_users }}</p>
+            </div>
+
+            <div class="card">
+              <h3>Active Users</h3>
+              <p>{{ active_users }}</p>
+            </div>
+
+            <!-- <div class="card">
+                <h3>Staff Users</h3>
+                <p>{{ staff_users }}</p>
+            </div> -->
+
+            <div class="card">
+                <h3>Total Programs</h3>
+                <p>{{ total_programs }}</p>
+            </div>
+
+        </div>
+
+
+        <!-- Recent Activity Section
+        <div class="recent-section">
+
+            <h2>Recently Registered Users</h2>
+
+            <table>
+
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Program</th>
+                    <th>Year</th>
+                    <th>Date Joined</th>
+                </tr>
+
+                {% for user in users %}
+
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.studentprofile.program }}</td>
+                    <td>{{ user.studentprofile.year }}</td>
+                    <td>{{ user.date_joined }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div> -->
+
+    </div>
+
+</body>
+</html>
