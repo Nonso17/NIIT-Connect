@@ -1,0 +1,43 @@
+body{
+    font-family: Arial;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 30px;
+}
+
+.profile-container{
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.top-section{
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-image{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-info{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.info-box{
+    background: #f7f7f7;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.info-box h3{
+    margin-top: 0;
+    color: #333;
+}
