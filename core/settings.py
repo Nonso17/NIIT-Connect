@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "accounts",
     "dashboard",
     "posts",
+    "chats"
 ]
 
 MIDDLEWARE = [

@@ -37,6 +37,8 @@ urlpatterns = [
 
     path('posts/', include('posts.urls')),
 
+    path('chats/', include('chats.urls')),
+
     path('admin-panel/', dashboard_views.admin_panel, name='admin_panel'),
 
     path('admin-panel/register/', account_views.register_view, name='register_user'),
