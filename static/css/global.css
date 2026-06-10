@@ -31,3 +31,76 @@ body {
     background-color: var(--color-background);
     color: var(--color-text-main);
 }
+
+/* ===== INPUT FIELDS (Floating Labels) ===== */
+.floating-group {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.floating-input {
+    width: 100%;
+    padding: 16px 16px 12px;
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    border-radius: 12px;
+    font-size: 15px;
+    color: var(--color-text-main);
+    background: rgba(255, 255, 255, 0.8);
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.floating-input::placeholder {
+    color: transparent;
+}
+
+.floating-label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    pointer-events: none;
+    transition: all var(--transition-fast);
+    padding: 0 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.floating-input:focus {
+    border-color: var(--color-primary-blue);
+    background: var(--color-white);
+    box-shadow: 0 0 0 4px var(--color-primary-blue-light);
+}
+
+.floating-input:focus + .floating-label,
+.floating-input:not(:placeholder-shown) + .floating-label,
+.floating-input:-webkit-autofill + .floating-label {
+    top: 0;
+    transform: translateY(-50%) scale(0.85);
+    background: var(--color-white);
+    color: var(--color-primary-blue);
+    font-weight: 600;
+}
+
+.floating-input:not(:focus):not(:placeholder-shown) + .floating-label,
+.floating-input:not(:focus):-webkit-autofill + .floating-label {
+    color: var(--color-text-muted);
+}
+
+.floating-input:-webkit-autofill,
+.floating-input:-webkit-autofill:hover, 
+.floating-input:-webkit-autofill:focus, 
+.floating-input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: var(--color-text-main) !important;
+}
+
+/* ===== INPUT ICONS ===== */
+.input-icon {
+    transition: color var(--transition-fast);
+}
