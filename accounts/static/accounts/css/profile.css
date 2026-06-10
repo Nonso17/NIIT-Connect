@@ -106,3 +106,26 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Edit Profile Modal Styles */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.modal-avatar {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+}
+
+@media (max-width: 576px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -133,9 +133,7 @@ def edit_profile(request):
 
         return redirect("profile")
 
-    context = {"profile": profile}
-
-    return render(request, "accounts/edit_profile.html", context)
+    return redirect("profile")
 
 
 @login_required

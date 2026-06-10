@@ -29,10 +29,10 @@
             <p class="user-email">{{ request.user.email }}</p>
         </div>
         <div class="profile-actions">
-            <a href="{% url 'edit_profile' %}" class="btn-primary" style="display: inline-flex; align-items: center; text-decoration: none;">
+            <button onclick="openEditModal()" class="btn-primary" style="display: inline-flex; align-items: center; border: none; cursor: pointer;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                 Edit Profile
-            </a>
+            </button>
         </div>
     </div>
 
@@ -55,4 +55,74 @@
         </div>
     </div>
 </div>
+
+<!-- Edit Profile Modal Overlay -->
+<div id="editProfileModal" class="modal-overlay">
+    <div class="modal-content glass-panel" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h3>Edit Profile</h3>
+            <button type="button" class="close-modal" onclick="closeEditModal()">&times;</button>
+        </div>
+        <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-group full-width" style="text-align: center; margin-bottom: 24px;">
+                    <div class="profile-image-section">
+                        {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture.url }}" class="profile-avatar modal-avatar" />
+                        {% else %}
+                        <img src="{% static 'images/default-avatar.png' %}" class="profile-avatar modal-avatar" />
+                        {% endif %}
+                    </div>
+                    <label for="profile_picture" style="margin-top: 12px; display: inline-block; cursor: pointer; color: var(--color-primary-blue); font-weight: 500;">Change Picture</label>
+                    <input type="file" id="profile_picture" name="profile_picture" style="display: none;" />
+                </div>
+                
+                <div class="form-grid">
+                    <div class="floating-group">
+                        <input type="text" name="first_name" value="{{ request.user.first_name }}" class="floating-input" placeholder=" " />
+                        <label class="floating-label">First Name</label>
+                    </div>
+                    <div class="floating-group">
+                        <input type="text" name="last_name" value="{{ request.user.last_name }}" class="floating-input" placeholder=" " />
+                        <label class="floating-label">Last Name</label>
+                    </div>
+                    <div class="floating-group">
+                        <input type="email" name="email" value="{{ request.user.email }}" class="floating-input" placeholder=" " />
+                        <label class="floating-label">Email</label>
+                    </div>
+                    <div class="floating-group">
+                        <input type="text" name="phone" value="{{ profile.number }}" class="floating-input" placeholder=" " />
+                        <label class="floating-label">Phone Number</label>
+                    </div>
+                    <div class="floating-group full-width" style="grid-column: 1 / -1;">
+                        <input type="text" name="address" value="{{ profile.address }}" class="floating-input" placeholder=" " />
+                        <label class="floating-label">Address</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+                <button type="submit" class="btn-primary" style="border:none; cursor:pointer;">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openEditModal() {
+        document.getElementById('editProfileModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeEditModal() {
+        document.getElementById('editProfileModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('editProfileModal').addEventListener('click', function() {
+        closeEditModal();
+    });
+</script>
+
 {% endblock %}
