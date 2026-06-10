@@ -1,109 +1,49 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
 
-    <link rel="stylesheet" href="{% static 'dashboard/css/admin.css' %}">
-</head>
-<body>
+{% block title %}Admin Dashboard | NIIT Connect{% endblock %}
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/admin.css' %}?v=3">
+{% endblock %}
 
-      <h2 class="logo">NIIT Connect</h2>
+{% block content %}
+<div class="topbar">
+    <div>
+        <h1 class="dashboard-title">Overview</h1>
+        <p class="welcome-text">Welcome back, <strong>{{ request.user.username }}</strong></p>
+    </div>
+</div>
 
-      <ul class="menu">
-        <li><a href="{% url 'admin_panel' %}">Dashboard</a></li>
-        <li><a href="{% url 'register_user' %}">Register User</a></li>
-        <li><a href="{% url 'manage_users' %}">Manage Users</a></li>
-        <li><a href="{% url 'chat_inbox' %}">Chats</a></li>
-        <li><a href="#">Posts</a></li>
-        <li><a href="/accounts/logout/">Logout</a></li>
-      </ul>
-
-    </aside>
-
-
-    <!-- Main Content -->
-    <div class="main-content">
-
-        <!-- Top Header -->
-        <div class="topbar">
-
-            <div>
-                <h1 class="dashboard-title">
-                  Admin Dashboard
-                </h1>
-
-                <p class="welcome-text">
-                  Welcome back, {{ request.user.username }}
-                </p>
-            </div>
-
+<div class="dashboard-cards">
+    <div class="card glass-panel">
+        <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
         </div>
-
-
-        <!-- Statistics Cards -->
-        <div class="dashboard-cards">
-
-            <div class="card">
-              <h3>Total Users</h3>
-              <p>{{ total_users }}</p>
-            </div>
-
-            <div class="card">
-              <h3>Active Users</h3>
-              <p>{{ active_users }}</p>
-            </div>
-
-            <!-- <div class="card">
-                <h3>Staff Users</h3>
-                <p>{{ staff_users }}</p>
-            </div> -->
-
-            <div class="card">
-                <h3>Total Programs</h3>
-                <p>{{ total_programs }}</p>
-            </div>
-
+        <div class="card-info">
+            <h3>Total Users</h3>
+            <p>{{ total_users }}</p>
         </div>
-
-
-        <!-- Recent Activity Section
-        <div class="recent-section">
-
-            <h2>Recently Registered Users</h2>
-
-            <table>
-
-                <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Program</th>
-                    <th>Year</th>
-                    <th>Date Joined</th>
-                </tr>
-
-                {% for user in users %}
-
-                <tr>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.studentprofile.program }}</td>
-                    <td>{{ user.studentprofile.year }}</td>
-                    <td>{{ user.date_joined }}</td>
-                </tr>
-
-                {% endfor %}
-
-            </table>
-
-        </div> -->
-
     </div>
 
-</body>
-</html>
+    <div class="card glass-panel">
+        <div class="card-icon active-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <div class="card-info">
+            <h3>Active Users</h3>
+            <p>{{ active_users }}</p>
+        </div>
+    </div>
+
+    <div class="card glass-panel">
+        <div class="card-icon program-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        </div>
+        <div class="card-info">
+            <h3>Total Programs</h3>
+            <p>{{ total_programs }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

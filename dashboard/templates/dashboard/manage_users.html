@@ -1,98 +1,59 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users</title>
-    <link rel="stylesheet" href="{% static 'dashboard/css/manage_users.css' %}">
-</head>
+{% block title %}Manage Users | NIIT Connect{% endblock %}
 
-<body>
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/manage_users.css' %}?v=3">
+{% endblock %}
 
-    
-    <!-- Sidebar -->
-    <aside class="sidebar">
-
-      <h2 class="logo">NIIT Connect</h2>
-
-      <ul class="menu">
-        <li><a href="{% url 'admin_panel' %}">Dashboard</a></li>
-        <li><a href="{% url 'register_user' %}">Register User</a></li>
-        <li><a href="{% url 'manage_users' %}">Manage Users</a></li>
-        <li><a href="#">Posts</a></li>
-        <li><a href="/accounts/logout/">Logout</a></li>
-      </ul>
-
-    </aside>
-
-    <div class="table-container">
-
-        {% if messages %}
-            {% for message in messages %}
-                <div class="message {{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-        
-        <h2 class="title">Manage Users</h2>
-
-        <form method="GET" class="search-form">
-
-            <input 
-                type="text"
-                name="search"
-                placeholder="Search users..."
-                value="{{ request.GET.search }}"
-            >
-            
-            <button type="submit">
-                Search
-            </button>
-
-        </form>
-
-        <table>
-            <tr>
-                <!-- <th>Username</th> -->
-                <th>Date Joined</th>
-                <!-- <th>Phone Number</th> -->
-                <th>Email</th>
-                <!-- <th>Program</th>
-                <th>Year</th> -->
-                <th>Action</th>
-            </tr>
-
-        {% for user in users %}
-            <tr>
-                <!-- <td>{{ user.username }}</td> -->
-                <td>{{ user.date_joined }}</td>
-                <!-- <td>{{user.studentprofile.number}}</td> -->
-                <td>{{user.email}}</td>
-                <!-- <td>{{user.studentprofile.program}}</td>
-                <td>{{user.studentprofile.year}}</td> -->
-                <td>
-                    <!-- <a href="{% url 'edit_user' user.id %}">Edit</a> -->
-                    <a href="{% url 'delete_user' user.id %}">Delete</a>
-                    |
-                    <a href="{% url 'reset_password' user.id %}" class="btn-reset">
-                        Reset Password
-                    </a>
-                    |
-                    <a href="{% url 'student_profile' user.id %}">
-                        View Profile
-                    </a>
-                </td>
-            </tr>
+{% block content %}
+<div class="glass-panel" style="padding: 32px; border-radius: 20px; overflow-x: auto;">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message {{ message.tags }}" style="padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+                {{ message }}
+            </div>
         {% endfor %}
-        </table>
-    </div>
-
+    {% endif %}
     
+    <h2 class="title" style="margin-top:0; margin-bottom: 24px; color: var(--color-primary-blue-dark);">Manage Users</h2>
 
-    
-</body>
+    <form method="GET" class="search-form" style="display: flex; gap: 12px; margin-bottom: 24px;">
+        <input 
+            type="text"
+            name="search"
+            placeholder="Search users..."
+            value="{{ request.GET.search }}"
+            style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid rgba(15, 23, 42, 0.1); background: rgba(255, 255, 255, 0.8);"
+        >
+        <button type="submit" class="btn-primary">Search</button>
+    </form>
 
-</html>
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <tr style="border-bottom: 2px solid rgba(15, 23, 42, 0.1);">
+            <th style="padding: 12px; color: var(--color-text-muted);">Date Joined</th>
+            <th style="padding: 12px; color: var(--color-text-muted);">Email</th>
+            <th style="padding: 12px; color: var(--color-text-muted);">Action</th>
+        </tr>
+
+    {% for user in users %}
+        <tr style="border-bottom: 1px solid rgba(15, 23, 42, 0.05);">
+            <td style="padding: 12px;">{{ user.date_joined|date:"M d, Y" }}</td>
+            <td style="padding: 12px; font-weight: 500; color: var(--color-primary-blue);">{{user.email}}</td>
+            <td style="padding: 12px;">
+                <a href="{% url 'delete_user' user.id %}" style="color: #ef4444; text-decoration: none; margin-right: 8px;">Delete</a>
+                |
+                <a href="{% url 'reset_password' user.id %}" style="color: var(--color-text-muted); text-decoration: none; margin: 0 8px;">Reset Pass</a>
+                |
+                <a href="{% url 'student_profile' user.id %}" style="color: var(--color-primary-blue); text-decoration: none; margin-left: 8px;">View Profile</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="3" style="padding: 24px; text-align: center; color: var(--color-text-muted);">No users found.</td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+{% endblock %}

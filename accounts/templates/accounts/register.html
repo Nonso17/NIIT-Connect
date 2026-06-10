@@ -1,94 +1,39 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Users</title>
-    <link rel="stylesheet" href="{% static 'accounts/css/register.css' %}">
-</head>
+{% block title %}Register Users | NIIT Connect{% endblock %}
 
-<body>
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'accounts/css/register.css' %}?v=3">
+{% endblock %}
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
+{% block content %}
+<div class="glass-panel" style="padding: 32px; border-radius: 20px;">
+    <h2 class="title" style="margin-top:0; margin-bottom: 24px; color: var(--color-primary-blue-dark);">Register New Users</h2>
 
-      <h2 class="logo">NIIT Connect</h2>
+    <form method="POST" action="">
+       {% csrf_token %}
 
-      <ul class="menu">
-        <li><a href="{% url 'admin_panel' %}">Dashboard</a></li>
-        <li><a href="{% url 'register_user' %}">Register User</a></li>
-        <li><a href="{% url 'manage_users' %}">Manage Users</a></li>
-        <li><a href="#">Posts</a></li>
-        <li><a href="/accounts/logout/">Logout</a></li>
-      </ul>
+       {% if messages %}
+            {% for message in messages %}
+            <p class="message {{message.tags}}" style="padding: 12px; border-radius: 8px; margin-bottom: 16px;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
 
-    </aside>
-
-
-    <div class="container">
-        <div class="title">
-            Register New Users
+        <div class="form" style="margin-bottom: 16px;">
+            <label for="email" style="display:block; margin-bottom: 8px; color: var(--color-text-muted);">Email</label>
+            <input type="email" id="email" name="email" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(15, 23, 42, 0.1); background: rgba(255, 255, 255, 0.8);">
         </div>
 
-        <form method="POST" action="">
+        <button type="submit" class="btn-primary" style="margin-top: 16px;">Register User</button>
+    </form>
 
-           {% csrf_token %}
-
-           {% if messages %}
-                {% for message in messages %}
-                <p class="message {{message.tags}}">{{ message }}</p>
-                {% endfor %}
-            {% endif %}
-
-            <!-- <div class="form">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="username">
-            </div>
-
-            <div class="form">
-                <label for="number">Phone Number</label>
-                <input type="number" id="number" name="number">
-            </div> -->
-
-            <div class="form">
-                <label for="email">Email</label>
-                <input type="text" id="email" name="email">
-            </div>
-
-            <!-- <div class="form">
-                <label for="Program">Program</label>
-                <input type="text" id="Program" name="program">
-            </div>
-
-            <div class="form">
-                <label for="year">Year</label>
-                <input type="text" id="year" name="year">
-            </div>  -->
-
-            <button type="submit">Register</button>
-        </form>
-
-        {% if temporary_password %}
-
-<div class="result-box">
-    <h3>User Created Successfully</h3>
-
-    <p>
-        Username:
-        <strong>{{ created_username }}</strong>
-    </p>
-
-    <p>
-        Temporary Password:
-        <strong>{{ temporary_password }}</strong>
-    </p>
-</div>
-
-{% endif %}
+    {% if temporary_password %}
+    <div class="result-box" style="margin-top: 24px; padding: 20px; background: rgba(16, 185, 129, 0.1); border: 1px solid #34d399; border-radius: 12px;">
+        <h3 style="color: #065f46; margin-top:0;">User Created Successfully</h3>
+        <p style="margin-bottom: 8px; color: #065f46;">Username: <strong>{{ created_username }}</strong></p>
+        <p style="margin-bottom: 0; color: #065f46;">Temporary Password: <strong>{{ temporary_password }}</strong></p>
     </div>
-    
-</body>
-
-</html>
+    {% endif %}
+</div>
+{% endblock %}
