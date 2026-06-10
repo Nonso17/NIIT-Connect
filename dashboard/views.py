@@ -54,6 +54,9 @@ def manage_users(request):
 
         users = User.objects.filter(is_staff=False)
 
+    for user in users:
+        StudentProfile.objects.get_or_create(user=user)
+
     context = {"users": users}
 
     return render(request, "dashboard/manage_users.html", context)
@@ -114,15 +117,3 @@ def reset_password(request, user_id):
     )
 
     return redirect("manage_users")
-
-
-@login_required
-def student_profile(request, user_id):
-
-    user = get_object_or_404(User, id=user_id)
-
-    profile, created = StudentProfile.objects.get_or_create(user=user)
-
-    context = {"student_user": user, "profile": profile}
-
-    return render(request, "dashboard/student_profile.html", context)

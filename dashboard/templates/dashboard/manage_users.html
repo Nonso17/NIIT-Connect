@@ -1,5 +1,6 @@
 {% extends 'base.html' %} {% load static %} {% block title %}Manage Users | NIIT Connect{% endblock %} {% block extra_css %}
 <link rel="stylesheet" href="{% static 'dashboard/css/manage_users.css' %}?v=5" />
+<link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}" />
 {% endblock %} {% block content %}
 <div class="glass-panel" style="padding: 32px; border-radius: 20px; overflow-x: auto; max-width: 900px">
     {% if messages %} {% for message in messages %}
@@ -63,7 +64,7 @@
             <td style="font-weight: 500; color: var(--color-text-main)">{{user.email}}</td>
             <td>
                 <div class="actions-cell" style="justify-content: flex-end">
-                    <a href="{% url 'student_profile' user.id %}" class="action-btn" title="View Profile">
+                    <button type="button" onclick="openStudentModal({{ user.id }})" class="action-btn" title="View Profile" style="border:none; background:transparent; cursor:pointer; padding:8px;">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
@@ -78,7 +79,7 @@
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                             <circle cx="12" cy="12" r="3"></circle>
                         </svg>
-                    </a>
+                    </button>
                     <a href="{% url 'reset_password' user.id %}" class="action-btn warning" title="Reset Password">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -165,6 +166,52 @@
         </div>
     </div>
 
+{% for user in users %}
+<!-- Student Profile Modal for user {{ user.id }} -->
+<div id="studentProfileModal-{{ user.id }}" class="modal-overlay" onclick="closeStudentModal({{ user.id }})">
+    <div class="modal-content glass-panel" onclick="event.stopPropagation()" style="padding: 0; overflow: hidden;">
+        <div class="modal-header" style="padding: 24px 32px 0 32px;">
+            <h3>Student Profile</h3>
+            <button type="button" class="close-modal" onclick="closeStudentModal({{ user.id }})">&times;</button>
+        </div>
+        <div class="modal-body" style="padding: 24px 32px 32px 32px;">
+            <div class="profile-header">
+                <div class="profile-avatar-wrapper">
+                    {% if user.studentprofile.profile_picture %}
+                        <img src="{{ user.studentprofile.profile_picture.url }}" alt="Profile Picture" class="profile-avatar modal-avatar" style="width: 90px; height: 90px;" />
+                    {% else %}
+                        <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar" class="profile-avatar modal-avatar" style="width: 90px; height: 90px;" />
+                    {% endif %}
+                </div>
+                <div class="profile-title">
+                    <h1 class="user-name" style="font-size: 24px; margin-bottom: 4px;">{{ user.first_name }} {{ user.last_name }}</h1>
+                    <p class="user-email" style="font-size: 14px;">{{ user.email }}</p>
+                </div>
+            </div>
+
+            <div class="profile-details-grid" style="margin-top: 24px;">
+                <div class="detail-card">
+                    <div class="detail-label">Phone Number</div>
+                    <div class="detail-value">{{ user.studentprofile.number|default:"Not provided" }}</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-label">Program</div>
+                    <div class="detail-value">{{ user.studentprofile.program|default:"Not provided" }}</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-label">Year</div>
+                    <div class="detail-value">{{ user.studentprofile.year|default:"Not provided" }}</div>
+                </div>
+                <div class="detail-card full-width">
+                    <div class="detail-label">Bio</div>
+                    <div class="detail-value bio-text">{{ user.studentprofile.bio|default:"No bio available." }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
 <!-- Modal Logic -->
 <script>
     function openAddUserModal() {
@@ -181,6 +228,18 @@
     document.getElementById('addUserModal').addEventListener('click', function() {
         closeAddUserModal();
     });
+</script>
+
+<script>
+    function openStudentModal(userId) {
+        document.getElementById('studentProfileModal-' + userId).classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeStudentModal(userId) {
+        document.getElementById('studentProfileModal-' + userId).classList.remove('active');
+        document.body.style.overflow = '';
+    }
 </script>
 
 {% endblock %}
