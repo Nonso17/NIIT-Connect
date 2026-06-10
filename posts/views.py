@@ -12,10 +12,7 @@ def create_post(request):
 
         if content:
 
-            Post.objects.create(
-                user=request.user,
-                content=content
-            )
+            Post.objects.create(user=request.user, content=content)
 
         return redirect("/dashboard/")
 

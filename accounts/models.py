@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
@@ -13,7 +14,5 @@ class StudentProfile(models.Model):
     profile_completed = models.BooleanField(default=False)
 
     profile_picture = models.ImageField(
-    upload_to='profile_pictures/',
-    blank=True,
-    null=True
+        upload_to="profile_pictures/", blank=True, null=True
     )

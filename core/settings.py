@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "accounts",
     "dashboard",
     "posts",
-    "chats"
+    "chats",
 ]
 
 MIDDLEWARE = [
@@ -64,7 +64,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR/'templates'],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -127,14 +127,14 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    BASE_DIR / "static",
 ]
-STATIC_ROOT=BASE_DIR/"staticfiles"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL = "/accounts/login/"
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"

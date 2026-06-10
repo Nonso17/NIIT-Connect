@@ -23,27 +23,21 @@ from django.conf.urls.static import static
 from dashboard import views as dashboard_views
 from accounts import views as account_views
 
+
 def home(request):
-    return redirect('/dashboard/')
+    return redirect("/dashboard/")
+
 
 urlpatterns = [
-    path('', home),
-
-    path('admin/', admin.site.urls),
-
-    path('accounts/', include('accounts.urls')),
-
-    path('dashboard/', include('dashboard.urls')),
-
-    path('posts/', include('posts.urls')),
-
-    path('chats/', include('chats.urls')),
-
-    path('admin-panel/', dashboard_views.admin_panel, name='admin_panel'),
-
-    path('admin-panel/register/', account_views.register_view, name='register_user'),
-
-    path('admin-panel/manage/', dashboard_views.manage_users, name='manage_users'),
+    path("", home),
+    path("admin/", admin.site.urls),
+    path("accounts/", include("accounts.urls")),
+    path("dashboard/", include("dashboard.urls")),
+    path("posts/", include("posts.urls")),
+    path("chats/", include("chats.urls")),
+    path("admin-panel/", dashboard_views.admin_panel, name="admin_panel"),
+    path("admin-panel/register/", account_views.register_view, name="register_user"),
+    path("admin-panel/manage/", dashboard_views.manage_users, name="manage_users"),
 ]
 
 if settings.DEBUG:
