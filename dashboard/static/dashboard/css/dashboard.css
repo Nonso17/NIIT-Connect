@@ -1,17 +1,18 @@
-/* Glassmorphism Dashboard Redesign */
+/* ===== GLASSMORPHISM DASHBOARD REDESIGN ===== */
 body {
     min-height: 100vh;
     background: linear-gradient(135deg, var(--color-primary-blue-light) 0%, var(--color-background) 100%);
     position: relative;
     overflow-x: hidden;
     margin: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     color: var(--color-text-main);
 }
 
 /* Background aesthetic shapes */
-body::before, body::after {
-    content: '';
+body::before,
+body::after {
+    content: "";
     position: fixed;
     border-radius: 50%;
     filter: blur(80px);
@@ -45,19 +46,29 @@ body::after {
     box-shadow: 0 8px 32px rgba(15, 23, 42, 0.05);
 }
 
-/* ===== LAYOUT & SIDEBAR ===== */
+/* ===== TOGGLE HANDLE VISIBILITY RULES (DESKTOP DEFAULT) ===== */
+.mobile-toggle-handle {
+    display: none !important; /* Hidden on desktop screens */
+}
+
+.desktop-toggle-handle {
+    display: flex;
+}
+
+/* ===== LAYOUT & SIDEBAR CONTAINER ===== */
 .layout-wrapper {
     display: flex;
-    max-width: 1200px;
+    justify-content: center;
+    max-width: 1280px; /* Slightly widened to accommodate larger data tables gracefully */
     margin: 0 auto;
     padding: 24px;
-    padding-left: calc(260px + 24px); /* sidebar width + gap */
+    padding-left: calc(250px + 24px + 24px); /* Sidebar width + gap + left side cushion */
     gap: 24px;
     transition: padding-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .layout-wrapper.sidebar-collapsed {
-    padding-left: 24px;
+    padding-left: calc(68px + 24px + 24px);
 }
 
 .sidebar {
@@ -67,79 +78,157 @@ body::after {
     left: 0;
     bottom: 0;
     z-index: 1500;
-    border-radius: 0 20px 20px 0;
-    padding: 24px 16px;
+    border-radius: 20px;
+    padding: 24px 12px;
     padding-bottom: 32px;
+    margin-left: 16px;
+    margin-top: 16px;
+    margin-bottom: 16px;
     overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+        width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        padding 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ===== SIDEBAR BRAND ===== */
 .sidebar-brand {
-    padding: 8px 16px 20px;
+    padding: 12px 12px 16px;
     margin-bottom: 8px;
     border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 48px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
-.name {
+.brand-full {
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-primary-blue-dark);
     letter-spacing: -0.5px;
     margin: 0;
+    opacity: 1;
+    transition: opacity 0.2s ease;
 }
 
+.brand-short {
+    display: none;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--color-primary-blue);
+    letter-spacing: -1px;
+    margin-left: 30px;
+}
+
+/* ===== DESKTOP COLLAPSED STRUCTURAL STATES ===== */
 .sidebar.collapsed {
-    transform: translateX(-100%);
+    width: 68px;
+    padding: 24px 8px;
 }
 
-/* ===== SIDEBAR TOGGLE HANDLE ===== */
-.sidebar-handle {
+.sidebar.collapsed .sidebar-brand {
+    justify-content: center;
+    padding: 12px 4px 16px;
+}
+
+.sidebar.collapsed .brand-full {
+    display: none;
+}
+
+.sidebar.collapsed .brand-short {
+    display: block;
+}
+
+/* Hide text labels in collapsed state */
+.sidebar.collapsed .menu a {
+    justify-content: center;
+    padding: 12px;
+    position: relative;
+    font-size: 0;
+}
+
+.sidebar.collapsed .menu a span,
+.sidebar.collapsed .link-text {
+    display: none;
+}
+
+.sidebar.collapsed .menu a svg {
+    font-size: initial;
+    flex-shrink: 0;
+}
+
+/* Tooltip on hover in collapsed state */
+.sidebar.collapsed .menu a::after {
+    content: attr(data-tooltip);
     position: absolute;
+    left: calc(100% + 12px);
     top: 50%;
-    right: -18px;
     transform: translateY(-50%);
-    width: 18px;
-    height: 56px;
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-left: none;
-    border-radius: 0 12px 12px 0;
+    background: var(--color-text-main);
+    color: var(--color-white, #fff);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 2000;
+}
+
+.sidebar.collapsed .menu a:hover::after {
+    opacity: 1;
+}
+
+.sidebar.collapsed .profile-item,
+.sidebar.collapsed .logout-item {
+    padding-top: 8px;
+}
+
+/* ===== HANDLES & BUTTON LAYOUT ===== */
+.sidebar-handle {
+    margin-left: auto;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--color-text-muted);
-    transition: all 0.25s ease;
-    box-shadow: 4px 0 12px rgba(15, 23, 42, 0.06);
+    transition: all 0.2s ease;
     padding: 0;
+    flex-shrink: 0;
 }
 
 .sidebar-handle:hover {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(15, 23, 42, 0.06);
     color: var(--color-primary-blue);
-    width: 22px;
-    box-shadow: 4px 0 16px rgba(15, 23, 42, 0.1);
 }
 
 .sidebar-handle svg {
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar.collapsed .sidebar-handle {
-    right: -18px;
+    margin-left: 0;
 }
 
 .sidebar.collapsed .sidebar-handle svg {
     transform: rotate(180deg);
 }
 
+/* ===== NAVIGATION NAVIGATION MENU ===== */
 .menu {
     list-style: none;
     display: flex;
@@ -161,20 +250,26 @@ body::after {
     padding: 12px 16px;
     border-radius: 12px;
     transition: all var(--transition-fast);
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .menu a svg {
     color: var(--color-text-muted);
     transition: color var(--transition-fast);
+    flex-shrink: 0;
+    min-width: 20px;
 }
 
-.menu a:hover, .menu a.active {
+.menu a:hover,
+.menu a.active {
     background: rgba(255, 255, 255, 0.8);
     color: var(--color-primary-blue);
     box-shadow: var(--shadow-sm);
 }
 
-.menu a:hover svg, .menu a.active svg {
+.menu a:hover svg,
+.menu a.active svg {
     color: var(--color-primary-blue);
 }
 
@@ -202,16 +297,17 @@ body::after {
     background: #fef2f2 !important;
 }
 
-/* ===== FEED ===== */
+/* ===== FEED CONTAINER ===== */
 .feed-container {
     flex: 1;
-    max-width: 680px;
+    max-width: 860px; /* Enhanced window space width allocation for dense tabular structures */
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 24px;
 }
 
-/* ===== POST CREATOR ===== */
+/* ===== POSTS ARCHITECTURE & USER CARDS ===== */
 .create-post {
     border-radius: 20px;
     padding: 20px;
@@ -292,7 +388,6 @@ body::after {
     box-shadow: 0 6px 20px 0 rgba(0, 118, 255, 0.45);
 }
 
-/* ===== POSTS ===== */
 .posts {
     display: flex;
     flex-direction: column;
@@ -302,7 +397,9 @@ body::after {
 .post-card {
     border-radius: 20px;
     padding: 24px;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
 .post-card:hover {
@@ -366,46 +463,179 @@ body::after {
     color: var(--color-text-muted);
 }
 
-/* ===== RESPONSIVENESS ===== */
-@media (max-width: 900px) {
-    .hamburger {
-        display: none; /* replaced by sidebar handle */
-    }
-
-    .sidebar {
-        width: 260px;
-        z-index: 3000;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        box-shadow: 8px 0 30px rgba(15, 23, 42, 0.08);
-    }
-
-    /* Start collapsed on mobile */
-    .sidebar:not(.open-mobile) {
-        transform: translateX(-100%);
-    }
-
-    .layout-wrapper {
-        padding-left: 24px;
-        justify-content: center;
-    }
-}
-
-@media (min-width: 901px) {
-    .hamburger {
-        display: none;
-    }
-}
-
-@media (max-width: 600px) {
+/* ===== MOBILE RESPONSIVENESS (HAMBURGER DRAWER) ===== */
+@media (max-width: 576px) {
     .layout-wrapper {
         padding: 16px;
+        padding-top: 80px; /* Leaves clear breathing room below floating handle */
+        position: relative;
     }
+
+    /* Reset desktop left paddings */
+    .layout-wrapper,
+    .layout-wrapper.sidebar-collapsed {
+        padding-left: 16px;
+    }
+
+    .desktop-toggle-handle {
+        display: none !important; /* Hide desktop internal layout trigger buttons completely */
+    }
+
+    /* Fixed Floating Hamburger Master Button Setup */
+    .mobile-toggle-handle {
+        display: flex !important;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 3100;
+        background: rgba(255, 255, 255, 0.9) !important;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(15, 23, 42, 0.1);
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.1);
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        margin: 0 !important;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Shift handle smoothly to the right when drawer rolls open */
+    .layout-wrapper:not(.sidebar-collapsed) .mobile-toggle-handle {
+        transform: translateX(216px);
+    }
+
+    /* Modern 3-Line CSS Hamburger Icon Implementation */
+    .hamburger-icon {
+        width: 18px;
+        height: 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+    }
+
+    .hamburger-icon span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: var(--color-text-main, #0f172a);
+        border-radius: 2px;
+        transition:
+            transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+            opacity 0.2s ease;
+        transform-origin: left center;
+    }
+
+    /* ===== MORPHING INTO AN 'X' TIMELINE WHEN OPENED ===== */
+    .layout-wrapper:not(.sidebar-collapsed) .hamburger-icon span:nth-child(1) {
+        transform: translateY(5px) rotate(45deg); /* Moves down into the center, then rotates */
+    }
+
+    .layout-wrapper:not(.sidebar-collapsed) .hamburger-icon span:nth-child(2) {
+        width: 0%;
+        opacity: 0;
+    }
+
+    .layout-wrapper:not(.sidebar-collapsed) .hamburger-icon span:nth-child(3) {
+        transform: translateY(-5px) rotate(-45deg); /* Moves up into the center, then rotates */
+    }
+
+    .layout-wrapper:not(.sidebar-collapsed) .mobile-toggle-handle .hamburger-icon span {
+        background-color: var(--color-text-main, #0f172a);
+        left: -50px;
+    }
+
+    /* Mobile Sidebar Overlay Drawer Blueprint */
+    .sidebar {
+        width: 250px !important;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        margin: 0 !important;
+        border-radius: 0 20px 20px 0;
+        z-index: 3000;
+        background: rgba(255, 255, 255, 0.98) !important;
+        box-shadow: 12px 0 40px rgba(15, 23, 42, 0.15);
+
+        /* TranslateX handles smooth offscreen layer animations cleanly */
+        transform: translateX(0);
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    /* Hidden Drawer Core Base */
+    .sidebar.collapsed {
+        transform: translateX(-105%);
+        width: 250px !important;
+    }
+
+    /* Force text elements to reveal accurately inside full mobile sliding views */
+    .sidebar.collapsed .brand-full,
+    .sidebar .brand-full {
+        display: block !important;
+    }
+
+    .sidebar.collapsed .brand-short {
+        display: none !important;
+    }
+
+    .sidebar.collapsed .menu a,
+    .sidebar .menu a {
+        justify-content: flex-start !important;
+        padding: 12px 16px !important;
+        font-size: 15px !important;
+    }
+
+    .sidebar.collapsed .menu a::after {
+        display: none !important; /* Force kill desktop hover descriptive tooltips */
+    }
+
     .feed-container {
         gap: 16px;
     }
+
     .post-card {
         padding: 20px;
+    }
+}
+
+/* ===== TABLET & LAPTOP RECOVERY ZONE ===== */
+@media (min-width: 577px) and (max-width: 900px) {
+    /* Hard block desktop layout values from shrinking the main content component grid */
+    .layout-wrapper,
+    .layout-wrapper.sidebar-collapsed {
+        padding-left: calc(68px + 24px + 24px);
+    }
+
+    .sidebar {
+        width: 68px !important;
+        padding: 24px 8px;
+    }
+
+    .sidebar .brand-full,
+    .sidebar .menu a span,
+    .sidebar .link-text {
+        display: none !important;
+    }
+
+    .sidebar .brand-short {
+        display: block !important;
+    }
+
+    .sidebar .menu a {
+        justify-content: center !important;
+        padding: 12px !important;
+        font-size: 0 !important;
+    }
+
+    .sidebar .menu a svg {
+        font-size: initial;
+    }
+
+    .sidebar .menu a::after {
+        display: block !important; /* Tooltips keep rendering properly on screen touches */
     }
 }

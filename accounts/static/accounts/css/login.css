@@ -5,7 +5,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    
+
     /* Dynamic background */
     background: linear-gradient(135deg, var(--color-primary-blue-light) 0%, var(--color-background) 100%);
     position: relative;
@@ -13,8 +13,9 @@ body {
 }
 
 /* Add abstract shapes to the background to enhance glass effect */
-body::before, body::after {
-    content: '';
+body::before,
+body::after {
+    content: "";
     position: absolute;
     border-radius: 50%;
     filter: blur(80px);
@@ -51,7 +52,9 @@ form.login {
     border-radius: 20px;
     padding: 40px 32px;
     transform: translateY(0);
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
 form.login:hover {
@@ -139,8 +142,8 @@ form.login:hover {
 }
 
 .floating-input:-webkit-autofill,
-.floating-input:-webkit-autofill:hover, 
-.floating-input:-webkit-autofill:focus, 
+.floating-input:-webkit-autofill:hover,
+.floating-input:-webkit-autofill:focus,
 .floating-input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 30px white inset !important;
     -webkit-text-fill-color: var(--color-text-main) !important;
@@ -233,10 +236,8 @@ button[type="submit"]:active {
     border: 1px solid #f87171;
 }
 
-
-
 /* ===== SMALL RESPONSIVENESS TWEAK ===== */
-@media (max-width: 480px) {
+@media (max-width: 576px) {
     form.login {
         padding: 30px 24px;
         border-radius: 16px;

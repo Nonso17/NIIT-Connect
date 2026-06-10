@@ -1,92 +1,92 @@
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-body{
-  font-family: Arial, sans-serif;
-  background: #f4f6f9;
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
 }
 
 /* Sidebar */
 
-.sidebar{
-  width: 240px;
-  height: 100vh;
-  background: #0D0D4D;
-  position: fixed;
-  left: 0;
-  top: 0;
-  padding: 25px;
-  color: white;
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background: #0d0d4d;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 25px;
+    color: white;
 }
 
-.logo{
-  margin-bottom: 40px;
-  font-size: 24px;
+.logo {
+    margin-bottom: 40px;
+    font-size: 24px;
 }
 
-.menu{
-  list-style: none;
+.menu {
+    list-style: none;
 }
 
-.menu li{
+.menu li {
     margin: 18px 0;
 }
 
-.menu a{
-  color: white;
-  text-decoration: none;
-  font-size: 16px;
-  transition: 0.3s;
+.menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
 }
 
-.menu a:hover{
-  color: orange;
-  padding-left: 5px;
+.menu a:hover {
+    color: orange;
+    padding-left: 5px;
 }
 
 /* Main Container */
 
-.container{
+.container {
     margin-left: 240px;
     padding: 40px;
 }
 
 /* Title */
 
-.title{
+.title {
     font-size: 28px;
     margin-bottom: 20px;
-    color: #0D0D4D;
+    color: #0d0d4d;
 }
 
 /* Form */
 
-form{
+form {
     background: white;
     padding: 30px;
     border-radius: 10px;
 
     width: 500px;
 
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Form Groups */
 
-.form-group{
+.form-group {
     margin-bottom: 20px;
 }
 
-.form-group label{
+.form-group label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
 }
 
-.form-group input{
+.form-group input {
     width: 100%;
     padding: 12px;
 
@@ -98,27 +98,27 @@ form{
 
 /* Button */
 
-button{
+button {
     width: 100%;
     padding: 12px;
 
     border: none;
     border-radius: 5px;
 
-    background: #0D0D4D;
+    background: #0d0d4d;
     color: white;
 
     font-size: 16px;
     cursor: pointer;
 }
 
-button:hover{
+button:hover {
     background: orange;
 }
 
 /* Messages */
 
-.message{
+.message {
     padding: 12px;
     margin-bottom: 20px;
 
@@ -126,12 +126,12 @@ button:hover{
     font-weight: bold;
 }
 
-.success{
+.success {
     background: #d4edda;
     color: #155724;
 }
 
-.error{
+.error {
     background: #f8d7da;
     color: #721c24;
 }

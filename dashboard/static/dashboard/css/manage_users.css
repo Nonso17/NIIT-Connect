@@ -1,4 +1,4 @@
-/* Modern Manage Users Table Styles */
+/* ===== MODERN MANAGE USERS TABLE STYLES ===== */
 
 .modern-table {
     width: 100%;
@@ -15,18 +15,18 @@
     color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border-bottom: 2px solid rgba(15, 23, 42, 0.05);
+    border-bottom: 2px solid var(--color-border-light);
 }
 
 .modern-table td {
     padding: 16px;
     vertical-align: middle;
-    border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+    border-bottom: 1px solid var(--color-border-light);
     transition: background var(--transition-fast);
 }
 
 .modern-table tr:hover td {
-    background: rgba(255, 255, 255, 0.5);
+    background: var(--color-overlay-light);
 }
 
 /* Badges */
@@ -36,11 +36,11 @@
     border-radius: 99px;
     font-size: 12px;
     font-weight: 600;
-    background: rgba(16, 185, 129, 0.1);
-    color: #059669;
+    background: var(--color-success-light);
+    color: var(--color-success);
 }
 
-/* Action Buttons */
+/* Action Buttons Grid */
 .actions-cell {
     display: flex;
     gap: 8px;
@@ -55,7 +55,7 @@
     height: 32px;
     border-radius: 8px;
     color: var(--color-text-muted);
-    background: rgba(15, 23, 42, 0.05);
+    background: var(--color-border-light);
     transition: all var(--transition-fast);
     text-decoration: none;
 }
@@ -67,16 +67,16 @@
 }
 
 .action-btn.delete:hover {
-    background: #fee2e2;
-    color: #ef4444;
+    background: var(--color-danger-light);
+    color: var(--color-danger);
 }
 
 .action-btn.warning:hover {
-    background: #fef3c7;
-    color: #d97706;
+    background: var(--color-warning-light);
+    color: var(--color-warning);
 }
 
-/* Search Form */
+/* Search Form Panel Layout */
 .search-form {
     display: flex;
     gap: 12px;
@@ -91,11 +91,11 @@
 .search-input-wrapper input {
     width: 100%;
     padding: 12px 12px 12px 40px;
-    border: 1px solid rgba(15, 23, 42, 0.1);
+    border: 1px solid var(--color-border-strong);
     border-radius: 12px;
     font-size: 15px;
     color: var(--color-text-main);
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--color-overlay-strong);
     outline: none;
     transition: all var(--transition-fast);
 }
@@ -113,4 +113,31 @@
     transform: translateY(-50%);
     color: var(--color-text-muted);
     pointer-events: none;
+}
+
+/* ===== FIXED MOBILE RESPONSIVENESS MEDIA ZONE ===== */
+@media (max-width: 576px) {
+    /* Combined and cleaned up duplicate mobile query statements cleanly */
+    .modern-table {
+        width: 100%;
+        max-width: none; /* Removed restrictive 300px limits */
+        white-space: nowrap; /* Prevents long emails from breaking into multiple messy lines */
+    }
+
+    /* Let the search inputs stack nicely on smaller viewports */
+    .search-form {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .search-form .btn-primary {
+        width: 100%;
+        justify-content: center;
+        padding: 12px;
+    }
+
+    /* Hide text labels inside header buttons on mobile to fit the button neatly */
+    .span-btn {
+        display: none !important;
+    }
 }
