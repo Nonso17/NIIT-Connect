@@ -11,30 +11,21 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    
-    <nav class="navbar glass-panel">
-        <div class="nav-left">
-            <button class="hamburger" id="sidebarToggle" aria-label="Toggle Sidebar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-            </button>
-            <h2 class="name">NIIT Connect{% if request.user.is_staff %} Admin{% endif %}</h2>
-        </div>
-        
-        <div class="nav-right">
-            {% if not request.user.is_staff %}
-            <a href="{% url 'chat_inbox' %}" class="icon-btn notification" aria-label="Notifications">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-                <span class="badge"></span>
-            </a>
-            {% endif %}
-            <a href="/accounts/profile/" class="icon-btn profileicon" aria-label="Profile">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </a>
-        </div>
-    </nav>
 
     <div class="layout-wrapper">
         <aside class="sidebar glass-panel" id="sidebar">
+            <!-- Branding -->
+            <div class="sidebar-brand">
+                <h2 class="name">NIIT Connect{% if request.user.is_staff %} Admin{% endif %}</h2>
+            </div>
+
+            <!-- Toggle handle -->
+            <button class="sidebar-handle" id="sidebarHandle" aria-label="Toggle Sidebar">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+
             <ul class="menu">
                 {% if request.user.is_staff %}
                     <!-- Admin Sidebar Links -->
@@ -77,6 +68,14 @@
                         </a>
                     </li>
                 {% endif %}
+
+                <!-- Profile -->
+                <li class="profile-item">
+                    <a href="/accounts/profile/" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        Profile
+                    </a>
+                </li>
                 
                 <!-- Shared Logout -->
                 <li class="logout-item">
@@ -98,13 +97,31 @@
     <!-- Base Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebar = document.getElementById('sidebar');
-            if(sidebarToggle && sidebar) {
-                sidebarToggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('active');
+            const handle = document.getElementById('sidebarHandle');
+            const layout = document.querySelector('.layout-wrapper');
+            const isMobile = () => window.matchMedia('(max-width: 900px)').matches;
+
+            // Collapse by default on mobile
+            if (isMobile()) {
+                sidebar.classList.add('collapsed');
+                layout.classList.add('sidebar-collapsed');
+            }
+
+            if (handle && sidebar && layout) {
+                handle.addEventListener('click', function() {
+                    sidebar.classList.toggle('collapsed');
+                    layout.classList.toggle('sidebar-collapsed');
                 });
             }
+
+            // Adjust on resize
+            window.addEventListener('resize', function() {
+                if (isMobile() && !sidebar.classList.contains('collapsed')) {
+                    sidebar.classList.add('collapsed');
+                    layout.classList.add('sidebar-collapsed');
+                }
+            });
         });
     </script>
     {% block extra_js %}{% endblock %}
