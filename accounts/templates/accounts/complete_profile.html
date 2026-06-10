@@ -1,113 +1,66 @@
 {% load static %}
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complete Profile</title>
-    <link rel="stylesheet" href="{% static 'accounts/css/complete_profile.css' %}">
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Complete Profile</title>
+        <link rel="stylesheet" href="{% static 'accounts/css/complete_profile.css' %}" />
+    </head>
+    <body>
+        {% if messages %} {% for message in messages %}
 
-    {% if messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
 
-    {% for message in messages %}
+        {% endfor %} {% endif %}
 
-        <div class="message {{ message.tags }}">
-            {{ message }}
+        <div class="profile-container">
+            <h2>Complete Your Profile</h2>
+
+            <p>Please complete your information before continuing.</p>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="profile-preview">
+                    {% if request.user.studentprofile.profile_picture %}
+                    <img src="{{ request.user.studentprofile.profile_picture.url }}" alt="Profile Picture" />
+                    {% else %}
+                    <img src="https://via.placeholder.com/120" alt="Default Picture" />
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>Profile Picture</label>
+
+                    <input type="file" name="profile_picture" />
+                </div>
+
+                <div class="form-group">
+                    <label>Full Name</label>
+
+                    <input type="text" name="full_name" placeholder="Enter your full name" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+
+                    <input type="text" name="number" placeholder="Enter your phone number" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Program</label>
+                    <input type="text" name="program" placeholder="e.g Computer Science" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Year</label>
+                    <input type="number" name="year" placeholder="e.g 2026" required />
+                </div>
+
+                <button type="submit" class="submit-btn">Save Profile</button>
+            </form>
         </div>
-
-    {% endfor %}
-
-    {% endif %}
-    
-    <div class="profile-container">
-
-        <h2>Complete Your Profile</h2>
-
-        <p>
-            Please complete your information before continuing.
-        </p>
-
-        <form method="POST" enctype="multipart/form-data">
-
-            {% csrf_token %}
-
-            <div class="profile-preview">
-
-                {% if request.user.studentprofile.profile_picture %}
-                    <img 
-                        src="{{ request.user.studentprofile.profile_picture.url }}"
-                        alt="Profile Picture"
-                    >
-                {% else %}
-                    <img 
-                        src="https://via.placeholder.com/120"
-                        alt="Default Picture"
-                    >
-                {% endif %}
-
-            </div>
-
-            <div class="form-group">
-                <label>Profile Picture</label>
-
-                <input 
-                    type="file"
-                    name="profile_picture"
-                >
-            </div>
-
-            <div class="form-group">
-                <label>Full Name</label>
-
-                <input 
-                    type="text"
-                    name="full_name"
-                    placeholder="Enter your full name"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label>Phone Number</label>
-
-                <input 
-                    type="text"
-                    name="number"
-                    placeholder="Enter your phone number"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label>Program</label>
-                <input 
-                    type="text"
-                    name="program"
-                    placeholder="e.g Computer Science"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label>Year</label>
-                <input 
-                    type="number"
-                    name="year"
-                    placeholder="e.g 2026"
-                    required
-                >
-            </div>
-
-            <button type="submit" class="submit-btn">
-                Save Profile
-            </button>
-
-        </form>
-
-    </div>
-
-</body>
+    </body>
 </html>

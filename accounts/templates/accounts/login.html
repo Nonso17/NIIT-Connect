@@ -1,100 +1,117 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | NIIT Connect</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login | NIIT Connect</title>
 
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="{% static 'css/global.css' %}">
-    <!-- Login Specific CSS -->
-    <link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
-</head>
-<body>
+        <!-- Global CSS -->
+        <link rel="stylesheet" href="{% static 'css/global.css' %}" />
+        <!-- Login Specific CSS -->
+        <link rel="stylesheet" href="{% static 'accounts/css/login.css' %}" />
+    </head>
+    <body>
+        <form method="POST" class="login">
+            {% csrf_token %}
 
-    <form method="POST" class="login">
-        {% csrf_token %}
+            <div class="login-header">
+                <h1>NIIT Connect</h1>
+                <p>Sign in to access your dashboard</p>
+            </div>
 
-        <div class="login-header">
-            <h1>NIIT Connect</h1>
-            <p>Sign in to access your dashboard</p>
-        </div>
+            {% if messages %} {% for message in messages %}
+            <div class="message {{message.tags}}">{{ message }}</div>
+            {% endfor %} {% endif %}
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="message {{message.tags}}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
+            <div class="input-group floating-group">
+                <input type="email" name="username" id="username" class="floating-input" autocomplete="username" placeholder=" " required />
+                <label for="username" class="floating-label">
+                    <svg
+                        class="input-icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                    </svg>
+                    Email Address
+                </label>
+            </div>
 
-        <div class="input-group floating-group">
-            <input type="email"
-                   name="username"
-                   id="username"
-                   class="floating-input"
-                   autocomplete="username"
-                   placeholder=" "
-                   required>
-            <label for="username" class="floating-label">
-                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                </svg>
-                Email Address
-            </label>
-        </div>
+            <div class="input-group floating-group">
+                <input type="password" name="password" id="password" class="floating-input" autocomplete="current-password" placeholder=" " required />
+                <label for="password" class="floating-label">
+                    <svg
+                        class="input-icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Password
+                </label>
+                <button type="button" class="password-toggle" id="togglePassword" aria-label="Toggle password visibility">
+                    <svg
+                        id="eyeIcon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+            </div>
 
-        <div class="input-group floating-group">
-            <input type="password"
-                   name="password"
-                   id="password"
-                   class="floating-input"
-                   autocomplete="current-password"
-                   placeholder=" "
-                   required>
-            <label for="password" class="floating-label">
-                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
-                Password
-            </label>
-            <button type="button" class="password-toggle" id="togglePassword" aria-label="Toggle password visibility">
-                <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
+            <button type="submit">
+                Sign In
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
             </button>
-        </div>
+        </form>
 
-        <button type="submit">
-            Sign In
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-        </button>
-    </form>
+        <script>
+            const togglePassword = document.getElementById("togglePassword");
+            const passwordInput = document.getElementById("password");
+            const eyeIcon = document.getElementById("eyeIcon");
 
-    <script>
-        const togglePassword = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('password');
-        const eyeIcon = document.getElementById('eyeIcon');
+            togglePassword.addEventListener("click", function () {
+                // Toggle the type attribute
+                const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+                passwordInput.setAttribute("type", type);
 
-        togglePassword.addEventListener('click', function () {
-            // Toggle the type attribute
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            
-            // Toggle the icon (Eye vs Eye-off)
-            if (type === 'password') {
-                eyeIcon.innerHTML = '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle>';
-            } else {
-                eyeIcon.innerHTML = '<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" x2="22" y1="2" y2="22"></line>';
-            }
-        });
-    </script>
-</body>
+                // Toggle the icon (Eye vs Eye-off)
+                if (type === "password") {
+                    eyeIcon.innerHTML = '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle>';
+                } else {
+                    eyeIcon.innerHTML =
+                        '<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" x2="22" y1="2" y2="22"></line>';
+                }
+            });
+        </script>
+    </body>
 </html>

@@ -1,70 +1,147 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Edit User | NIIT Connect{% endblock %}
-
-{% block extra_css %}
-{% endblock %}
-
-{% block content %}
-<div class="glass-panel" style="max-width: 600px; margin: 0 auto; padding: 40px 32px; border-radius: 20px;">
-    <div style="text-align: center; margin-bottom: 30px;">
-        <h2 class="title" style="margin:0; color: var(--color-primary-blue-dark); font-size: 24px; font-weight: 700; letter-spacing: -0.5px;">Edit User Profile</h2>
-        <p style="color: var(--color-text-muted); font-size: 14px; margin-top: 6px;">Update information for {{ user.username }}</p>
+{% extends 'base.html' %} {% load static %} {% block title %}Edit User | NIIT Connect{% endblock %} {% block extra_css %} {% endblock %} {% block content %}
+<div class="glass-panel" style="max-width: 600px; margin: 0 auto; padding: 40px 32px; border-radius: 20px">
+    <div style="text-align: center; margin-bottom: 30px">
+        <h2 class="title" style="margin: 0; color: var(--color-primary-blue-dark); font-size: 24px; font-weight: 700; letter-spacing: -0.5px">Edit User Profile</h2>
+        <p style="color: var(--color-text-muted); font-size: 14px; margin-top: 6px">Update information for {{ user.username }}</p>
     </div>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="message {{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+    {% if messages %} {% for message in messages %}
+    <div class="message {{ message.tags }}">{{ message }}</div>
+    {% endfor %} {% endif %}
 
     <form method="POST">
         {% csrf_token %}
 
         <div class="input-group floating-group">
-            <input type="text" id="username" name="username" class="floating-input" value="{{ user.username }}" placeholder=" " required>
+            <input type="text" id="username" name="username" class="floating-input" value="{{ user.username }}" placeholder=" " required />
             <label for="username" class="floating-label">
-                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <svg
+                    class="input-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
                 Username
             </label>
         </div>
 
         <div class="input-group floating-group">
-            <input type="email" id="email" name="email" class="floating-input" value="{{ user.email }}" placeholder=" " required>
+            <input type="email" id="email" name="email" class="floating-input" value="{{ user.email }}" placeholder=" " required />
             <label for="email" class="floating-label">
-                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+                <svg
+                    class="input-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                </svg>
                 Email Address
             </label>
         </div>
 
         <div class="input-group floating-group">
-            <input type="text" id="number" name="number" class="floating-input" value="{{ profile.number }}" placeholder=" ">
+            <input type="text" id="number" name="number" class="floating-input" value="{{ profile.number }}" placeholder=" " />
             <label for="number" class="floating-label">
-                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <svg
+                    class="input-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path
+                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                    ></path>
+                </svg>
                 Phone Number
             </label>
         </div>
 
         <div class="input-group floating-group">
-            <input type="text" id="program" name="program" class="floating-input" value="{{ profile.program }}" placeholder=" ">
+            <input type="text" id="program" name="program" class="floating-input" value="{{ profile.program }}" placeholder=" " />
             <label for="program" class="floating-label">
-                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                <svg
+                    class="input-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
                 Program
             </label>
         </div>
 
         <div class="input-group floating-group">
-            <input type="text" id="year" name="year" class="floating-input" value="{{ profile.year }}" placeholder=" ">
+            <input type="text" id="year" name="year" class="floating-input" value="{{ profile.year }}" placeholder=" " />
             <label for="year" class="floating-label">
-                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <svg
+                    class="input-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
                 Year
             </label>
         </div>
 
-        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 10px; padding: 14px;">
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 10px; padding: 14px">
             Update Profile
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
         </button>
     </form>
 </div>
