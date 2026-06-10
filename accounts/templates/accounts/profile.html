@@ -1,75 +1,58 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>My Profile</title>
+{% block title %}My Profile | NIIT Connect{% endblock %}
 
-        <link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}" />
-    </head>
-    <body>
-        <div class="navbar">
-            <a href="{% url 'student_dashboard' %}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                    <path d="M15 18l-6-6 6-6" />
-                </svg>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}?v=8" />
+{% endblock %}
+
+{% block content %}
+<div class="glass-panel profile-panel">
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="profile-header">
+        <div class="profile-avatar-wrapper">
+            {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-avatar" />
+            {% else %}
+                <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar" class="profile-avatar" />
+            {% endif %}
+        </div>
+        <div class="profile-title">
+            <h1 class="user-name">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
+            <p class="user-email">{{ request.user.email }}</p>
+        </div>
+        <div class="profile-actions">
+            <a href="{% url 'edit_profile' %}" class="btn-primary" style="display: inline-flex; align-items: center; text-decoration: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                Edit Profile
             </a>
-
-            <h2 class="name">NIIT Connect</h2>
-
-            <div class="notification">
-                <a href="notifications.html">
-                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2C10 2 8 4 8 6V7C8 10 7 11 5 13V14H19V13C17 11 16 10 16 7V6C16 4 14 2 12 2Z" fill="white" />
-                        <circle cx="12" cy="18" r="2" fill="white" />
-                    </svg>
-                </a>
-            </div>
-
-            <div class="profileicon">
-                <a href="/accounts/profile/">
-                    <svg width="30" height="30" viewBox="0 0 24 24">
-                        <circle cx="12" cy="8" r="4" fill="white" />
-                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="white" />
-                    </svg>
-                </a>
-            </div>
         </div>
+    </div>
 
-        <div class="profile-container">
-            <div class="profile-card">
-                <!-- PROFILE IMAGE -->
-                <div class="profile-image-section">
-                    {% if profile.profile_picture %}
-                    <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" />
-                    {% else %}
-                    <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar" />
-                    {% endif %}
-                </div>
-
-                <!-- USER INFO -->
-                <div class="profile-info">
-                    <h1>{{ request.user.first_name }} {{ request.user.last_name }}</h1>
-
-                    <p><strong>Email:</strong> {{ request.user.email }}</p>
-
-                    <p><strong>Phone Number:</strong> {{ profile.number }}</p>
-
-                    <p><strong>Program:</strong> {{ profile.program }}</p>
-
-                    <p><strong>Year:</strong> {{ profile.year }}</p>
-
-                    <!-- <p><strong>Bio:</strong></p>
-
-                <div class="bio-box">
-                    {{ profile.bio }}
-                </div> -->
-
-                    <a href="{% url 'edit_profile' %}" class="edit-btn"> Edit Profile </a>
-                </div>
-            </div>
+    <div class="profile-details-grid">
+        <div class="detail-card">
+            <div class="detail-label">Phone Number</div>
+            <div class="detail-value">{{ profile.number|default:"Not provided" }}</div>
         </div>
-    </body>
-</html>
+        <div class="detail-card">
+            <div class="detail-label">Program</div>
+            <div class="detail-value">{{ profile.program|default:"Not provided" }}</div>
+        </div>
+        <div class="detail-card">
+            <div class="detail-label">Year</div>
+            <div class="detail-value">{{ profile.year|default:"Not provided" }}</div>
+        </div>
+        <div class="detail-card full-width">
+            <div class="detail-label">Bio</div>
+            <div class="detail-value bio-text">{{ profile.bio|default:"No bio available." }}</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
