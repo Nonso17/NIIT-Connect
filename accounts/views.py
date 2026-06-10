@@ -32,21 +32,15 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-
-            profile, created = StudentProfile.objects.get_or_create(user=user)
-
-            if profile.must_change_password:
-                return redirect("change_password")
-
             if user.is_staff:
                 return redirect('/admin-panel/')
-
             profile, created = StudentProfile.objects.get_or_create(user=user)
-
+            if profile.must_change_password:
+                return redirect('change_password')
             if not profile.profile_completed:
                 return redirect('complete_profile')
-
             return redirect('/dashboard/')
+            
 
         messages.error(request, "Invalid email or password")
         return redirect('/accounts/login/')
