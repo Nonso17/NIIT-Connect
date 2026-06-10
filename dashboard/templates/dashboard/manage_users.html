@@ -8,7 +8,7 @@
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px">
         <h2 class="title" style="margin: 0; color: var(--color-primary-blue-dark); font-size: 24px; font-weight: 700; letter-spacing: -0.5px">Manage Users</h2>
-        <a href="{% url 'register_user' %}" class="btn-primary" style="padding: 10px 16px; font-size: 14px; text-decoration: none">
+        <button onclick="openAddUserModal()" class="btn-primary" style="padding: 10px 16px; font-size: 14px; border: none; cursor: pointer">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -26,7 +26,7 @@
                 <line x1="23" y1="11" x2="17" y2="11"></line>
             </svg>
             <span class="span-btn"> Add User</span>
-        </a>
+        </button>
     </div>
     <form method="GET" class="search-form">
         <div class="search-input-wrapper">
@@ -141,4 +141,46 @@
         {% endfor %}
     </table>
 </div>
+
+    <!-- Add User Modal Overlay -->
+    <div id="addUserModal" class="modal-overlay">
+        <div class="modal-content glass-panel" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Add New User</h3>
+                <button type="button" class="close-modal" onclick="closeAddUserModal()">&times;</button>
+            </div>
+            <form action="{% url 'register_user' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="modal-email">Email Address</label>
+                        <input type="email" id="modal-email" name="email" required placeholder="student@example.com" class="modern-input" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeAddUserModal()">Cancel</button>
+                    <button type="submit" class="btn-primary" style="border:none; cursor:pointer;">Add User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<!-- Modal Logic -->
+<script>
+    function openAddUserModal() {
+        document.getElementById('addUserModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAddUserModal() {
+        document.getElementById('addUserModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Close modal when clicking outside of the content box
+    document.getElementById('addUserModal').addEventListener('click', function() {
+        closeAddUserModal();
+    });
+</script>
+
 {% endblock %}

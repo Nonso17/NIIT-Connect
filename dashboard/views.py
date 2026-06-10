@@ -40,8 +40,6 @@ def admin_panel(request):
     return render(request, "dashboard/admin.html", context)
 
 
-def register_user(request):
-    return render(request, "accounts/register.html")
 
 
 def manage_users(request):

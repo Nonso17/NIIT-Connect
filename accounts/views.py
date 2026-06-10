@@ -69,7 +69,7 @@ def register_view(request):
         # prevent duplicate email
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email already exists")
-            return redirect("/admin-panel/register/")
+            return redirect("/admin-panel/manage/")
 
         # auto username from email
         username = email.split("@")[0]
@@ -92,7 +92,7 @@ def register_view(request):
 
         return redirect("/admin-panel/manage/")
 
-    return render(request, "accounts/register.html")
+    return redirect("/admin-panel/manage/")
 
 
 @login_required
