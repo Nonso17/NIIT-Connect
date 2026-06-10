@@ -1,0 +1,7 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path("", views.inbox, name="chat_inbox"),
+    path("<int:user_id>/", views.chat_room, name="chat_room"),
+]

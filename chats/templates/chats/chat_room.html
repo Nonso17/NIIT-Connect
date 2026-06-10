@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Room</title>
+
+    <link rel="stylesheet" href="{% static 'chats/css/chat.css' %}">
+</head>
+<body>
+
+<div class="chat-container">
+
+    <!-- LEFT: user info / header -->
+    <div class="chat-header">
+        <h2>Chat with {{ receiver.username }}</h2>
+    </div>
+
+    <!-- MESSAGES AREA -->
+    <div class="chat-box">
+
+        {% for message in messages %}
+
+            {% if message.sender == request.user %}
+
+                <!-- SENT MESSAGE -->
+                <div class="message sent">
+                    <p>{{ message.content }}</p>
+                    <small>{{ message.created_at|date:"H:i" }}</small>
+                </div>
+
+            {% else %}
+
+                <!-- RECEIVED MESSAGE -->
+                <div class="message received">
+                    <p>{{ message.content }}</p>
+                    <small>{{ message.created_at|date:"H:i" }}</small>
+                </div>
+
+            {% endif %}
+
+        {% empty %}
+
+            <p class="no-messages">No messages yet. Say hi 👋</p>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- INPUT BOX -->
+    <form method="POST" class="chat-input">
+        {% csrf_token %}
+
+        <input 
+            type="text"
+            name="content"
+            placeholder="Type a message..."
+            required
+        >
+
+        <button type="submit">Send</button>
+    </form>
+
+</div>
+
+</body>
+</html>
