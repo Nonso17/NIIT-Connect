@@ -1,81 +1,76 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login | NIIT Connect</title>
 
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <!-- Login Specific CSS -->
     <link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
 </head>
-
 <body>
 
     <form method="POST" class="login">
-
         {% csrf_token %}
 
+        <div class="login-header">
+            <h1>NIIT Connect</h1>
+            <p>Sign in to access your dashboard</p>
+        </div>
+
         {% if messages %}
-        {% for message in messages %}
-        <p class="message {{message.tags}}">{{ message }}</p>
-         {% endfor %}
+            {% for message in messages %}
+                <div class="message {{message.tags}}">
+                    {{ message }}
+                </div>
+            {% endfor %}
         {% endif %}
-             
-              <svg width="360" height="140" viewBox="0 0 360 140" xmlns="http://www.w3.org/2000/svg">
 
-    <!-- Main Text -->
-    <text x="50%" y="55%"
-        text-anchor="middle"
-        font-family="Arial, Helvetica, sans-serif"
-        font-size="48"
-        font-weight="800"
-        fill="#0D0D4D">
-        NIIT
-    </text>
+        <div class="input-group floating-group">
+            <input type="email"
+                   name="username"
+                   id="username"
+                   class="floating-input"
+                   autocomplete="username"
+                   placeholder=" "
+                   required>
+            <label for="username" class="floating-label">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                </svg>
+                Email Address
+            </label>
+        </div>
 
-    <!-- Subtitle -->
-    <text x="50%" y="80%"
-        text-anchor="middle"
-        font-family="Arial, Helvetica, sans-serif"
-        font-size="18"
-        font-weight="600"
-        letter-spacing="3"
-        fill="#0D0D4D">
-        CONNECT
-    </text>
-
-</svg>
-
-        <!-- <div class="title1">
-            <h3 class="title">Login here</h3>
-        </div> -->
-
-        <label for="username">Email</label>
-
-        <input type="email"
-               name="username"
-               id="username"
-               autocomplete="username"
-               placeholder="Email"
-               required>
-
-        <label for="password">Password</label>
-
-        <input type="password"
-               name="password"
-               id="password"
-               autocomplete="password"
-               placeholder="********"
-               required>
+        <div class="input-group floating-group">
+            <input type="password"
+                   name="password"
+                   id="password"
+                   class="floating-input"
+                   autocomplete="current-password"
+                   placeholder=" "
+                   required>
+            <label for="password" class="floating-label">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                Password
+            </label>
+        </div>
 
         <button type="submit">
-            Login
+            Sign In
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
         </button>
-
     </form>
 
 </body>
-
 </html>

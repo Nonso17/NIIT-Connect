@@ -1,104 +1,205 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
+/* Glassmorphism Login Redesign */
 body {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ffffff;
     padding: 20px;
+    
+    /* Dynamic background */
+    background: linear-gradient(135deg, var(--color-primary-blue-light) 0%, var(--color-background) 100%);
+    position: relative;
+    overflow: hidden;
 }
 
-/* ===== LOGIN CARD ===== */
+/* Add abstract shapes to the background to enhance glass effect */
+body::before, body::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
+}
+
+body::before {
+    width: 400px;
+    height: 400px;
+    background: var(--color-primary-blue);
+    opacity: 0.15;
+    top: -100px;
+    left: -100px;
+}
+
+body::after {
+    width: 300px;
+    height: 300px;
+    background: var(--color-primary-blue-dark);
+    opacity: 0.1;
+    bottom: -50px;
+    right: -50px;
+}
+
+/* ===== LOGIN CARD (Glassmorphism) ===== */
 form.login {
     width: 100%;
     max-width: 420px;
-    background: #ffffff;
-    border: 2px solid #0D0D4D;
-    border-radius: 12px;
-    padding: 32px 28px;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+    border-radius: 20px;
+    padding: 40px 32px;
+    transform: translateY(0);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-/* ===== SVG LOGO ===== */
-form.login svg {
-    display: block;
-    margin: 0 auto 15px;
-    max-width: 100%;
+form.login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
 }
 
-/* ===== LABELS ===== */
-label {
-    display: block;
-    margin: 14px 0 6px;
+/* ===== HEADER ===== */
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-primary-blue-dark);
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+}
+
+.login-header p {
     font-size: 14px;
-    font-weight: 500;
-    color: #0D0D4D;
+    color: var(--color-text-muted);
 }
 
-/* ===== INPUT FIELDS ===== */
-input {
+/* ===== INPUT FIELDS (Floating Labels) ===== */
+.floating-group {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.floating-input {
     width: 100%;
-    padding: 12px 14px;
-    border: 1.5px solid #0D0D4D;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #0D0D4D;
-    background: #ffffff;
+    padding: 16px 16px 12px;
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    border-radius: 12px;
+    font-size: 15px;
+    color: var(--color-text-main);
+    background: rgba(255, 255, 255, 0.8);
     outline: none;
-    transition: 0.2s ease;
+    transition: all var(--transition-fast);
 }
 
-input::placeholder {
-    color: rgba(13, 13, 77, 0.5);
+.floating-input::placeholder {
+    color: transparent;
 }
 
-input:focus {
-    border: 2px solid #0D0D4D;
+.floating-label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    pointer-events: none;
+    transition: all var(--transition-fast);
+    padding: 0 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.floating-input:focus {
+    border-color: var(--color-primary-blue);
+    background: var(--color-white);
+    box-shadow: 0 0 0 4px var(--color-primary-blue-light);
+}
+
+.floating-input:focus + .floating-label,
+.floating-input:not(:placeholder-shown) + .floating-label,
+.floating-input:-webkit-autofill + .floating-label {
+    top: 0;
+    transform: translateY(-50%) scale(0.85);
+    background: var(--color-white);
+    color: var(--color-primary-blue);
+    font-weight: 600;
+}
+
+.floating-input:not(:focus):not(:placeholder-shown) + .floating-label,
+.floating-input:not(:focus):-webkit-autofill + .floating-label {
+    color: var(--color-text-muted);
+}
+
+.floating-input:-webkit-autofill,
+.floating-input:-webkit-autofill:hover, 
+.floating-input:-webkit-autofill:focus, 
+.floating-input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: var(--color-text-main) !important;
+}
+
+/* ===== INPUT ICONS ===== */
+.input-icon {
+    transition: color var(--transition-fast);
 }
 
 /* ===== BUTTON ===== */
 button {
     width: 100%;
-    margin-top: 20px;
-    padding: 12px;
-    background: #0D0D4D;
-    color: #ffffff;
-    border: 2px solid #0D0D4D;
-    border-radius: 8px;
-    font-size: 15px;
+    margin-top: 30px;
+    padding: 14px;
+    background: var(--color-primary-blue);
+    color: var(--color-white);
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: 0.2s ease;
+    box-shadow: var(--shadow-blue);
+    transition: all var(--transition-fast);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
 }
 
 button:hover {
-    background: #ffffff;
-    color: #0D0D4D;
+    background: var(--color-primary-blue-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px 0 rgba(0, 118, 255, 0.45);
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 10px 0 rgba(0, 118, 255, 0.3);
 }
 
 /* ===== MESSAGES ===== */
 .message {
-    padding: 10px 12px;
-    margin-bottom: 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    border: 1px solid #0D0D4D;
-    color: #0D0D4D;
-    background: #ffffff;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    color: #b91c1c;
+    background: rgba(254, 226, 226, 0.5);
+    display: flex;
+    align-items: center;
 }
 
 /* ===== SMALL RESPONSIVENESS TWEAK ===== */
 @media (max-width: 480px) {
     form.login {
-        padding: 24px 18px;
-    }
-
-    .title {
-        font-size: 20px;
+        padding: 30px 24px;
+        border-radius: 16px;
     }
 }
