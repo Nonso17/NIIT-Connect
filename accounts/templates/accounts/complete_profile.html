@@ -27,7 +27,7 @@
                     {% if request.user.studentprofile.profile_picture %}
                     <img src="{{ request.user.studentprofile.profile_picture.url }}" alt="Profile Picture" />
                     {% else %}
-                    <img src="https://via.placeholder.com/120" alt="Default Picture" />
+                    <img src="{% static 'images/default-avatar.png' %}" alt="Default Picture" />
                     {% endif %}
                 </div>
 
