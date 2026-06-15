@@ -1,79 +1,117 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Chat Room</title>
 
-        <link rel="stylesheet" href="{% static 'chats/css/chat.css' %}" />
-    </head>
-    <body>
-        <div class="navbar">
-            <a href="{% url 'chat_inbox' %}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                    <path d="M15 18l-6-6 6-6" />
+<head>
+    <meta charset="UTF-8" />
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="{% static 'chats/css/chat.css' %}" />
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="{% url 'chat_inbox' %}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <path d="M15 18l-6-6 6-6" />
+            </svg>
+        </a>
+
+        <h2 class="name">NIIT Connect</h2>
+
+        <div class="notification">
+            <a href="notifications.html">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2C10 2 8 4 8 6V7C8 10 7 11 5 13V14H19V13C17 11 16 10 16 7V6C16 4 14 2 12 2Z" fill="white" />
+                    <circle cx="12" cy="18" r="2" fill="white" />
                 </svg>
             </a>
-
-            <h2 class="name">NIIT Connect</h2>
-
-            <div class="notification">
-                <a href="notifications.html">
-                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2C10 2 8 4 8 6V7C8 10 7 11 5 13V14H19V13C17 11 16 10 16 7V6C16 4 14 2 12 2Z" fill="white" />
-                        <circle cx="12" cy="18" r="2" fill="white" />
-                    </svg>
-                </a>
-            </div>
-
-            <div class="profileicon">
-                <a href="/accounts/profile/">
-                    <svg width="30" height="30" viewBox="0 0 24 24">
-                        <circle cx="12" cy="8" r="4" fill="white" />
-                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="white" />
-                    </svg>
-                </a>
-            </div>
         </div>
-        <div class="chat-container">
-            <!-- LEFT: user info / header -->
-            <div class="chat-header">
-                <h2>Chat with {{ receiver.username }}</h2>
-            </div>
 
-            <!-- MESSAGES AREA -->
-            <div class="chat-box">
-                {% for message in messages %} {% if message.sender == request.user %}
+        <div class="profileicon">
+            <a href="/accounts/profile/">
+                <svg width="30" height="30" viewBox="0 0 24 24">
+                    <circle cx="12" cy="8" r="4" fill="white" />
+                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="white" />
+                </svg>
+            </a>
+        </div>
+    </div>
 
-                <!-- SENT MESSAGE -->
-                <div class="message sent">
-                    <p>{{ message.content }}</p>
-                    <small>{{ message.created_at|date:"H:i" }}</small>
-                </div>
+    <div class="chat-container">
+
+        <!-- LEFT: user info / header -->
+        <div class="chat-header">
+            <h2>Chat with {{ receiver.username }}</h2>
+        </div>
+
+        <!-- MESSAGES AREA -->
+        <div class="chat-box">
+            {% for message in messages %}
+                {% if message.sender == request.user %}
+
+                    <!-- SENT MESSAGE -->
+                    <div class="message sent">
+                        <p>{{ message.content }}</p>
+                        <small>{{ message.created_at|date:"H:i" }}</small>
+                    </div>
 
                 {% else %}
 
-                <!-- RECEIVED MESSAGE -->
-                <div class="message received">
-                    <p>{{ message.content }}</p>
-                    <small>{{ message.created_at|date:"H:i" }}</small>
-                </div>
+                    <!-- RECEIVED MESSAGE -->
+                    <div class="message received">
+                        <p>{{ message.content }}</p>
+                        <small>{{ message.created_at|date:"H:i" }}</small>
+                    </div>
 
-                {% endif %} {% empty %}
+                {% endif %}
+            {% empty %}
 
                 <p class="no-messages">No messages yet. Say hi 👋</p>
 
-                {% endfor %}
-            </div>
-
-            <!-- INPUT BOX -->
-            <form method="POST" class="chat-input">
-                {% csrf_token %}
-
-                <input type="text" name="content" placeholder="Type a message..." required />
-
-                <button type="submit">Send</button>
-            </form>
+            {% endfor %}
         </div>
-    </body>
+
+        <!-- INPUT BOX -->
+        <form method="POST" class="chat-input">
+            {% csrf_token %}
+
+            <input type="text" name="content" placeholder="Type a message..." required />
+
+            <button type="submit">Send</button>
+        </form>
+
+    </div>
+
+    <script>
+        function loadMessages() {
+            fetch("/chats/messages/{{ other_user.id }}/")
+                .then(response => response.json())
+                .then(data => {
+
+                    const box = document.querySelector(".chat-box");
+
+                    box.innerHTML = "";
+
+                    data.forEach(msg => {
+                        box.innerHTML += `
+                            <div style="margin-bottom:10px;">
+                                <strong>${msg.sender}</strong>: ${msg.content}
+                                <small style="color:gray;">${msg.time}</small>
+                            </div>
+                        `;
+                    });
+
+                    // auto scroll
+                    box.scrollTop = box.scrollHeight;
+                });
+        }
+
+        // run every 3 seconds
+        setInterval(loadMessages, 3000);
+
+        // initial load
+        loadMessages();
+    </script>
+    
+</body>
 </html>

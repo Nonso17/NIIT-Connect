@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Message
+from django.http import JsonResponse
 
 
 @login_required
@@ -35,3 +36,24 @@ def inbox(request):
     context = {"users": users}
 
     return render(request, "chats/inbox.html", context)
+
+
+@login_required
+def fetch_messages(request, user_id):
+    other_user = User.objects.get(id=user_id)
+
+    messages = Message.objects.filter(
+        sender__in=[request.user, other_user],
+        receiver__in=[request.user, other_user]
+    ).order_by("timestamp")
+
+    data = [
+        {
+            "sender": m.sender.username,
+            "content": m.content,
+            "time": m.timestamp.strftime("%H:%M")
+        }
+        for m in messages
+    ]
+
+    return JsonResponse(data, safe=False)
