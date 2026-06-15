@@ -58,7 +58,7 @@
 
 <!-- Edit Profile Modal Overlay -->
 <div id="editProfileModal" class="modal-overlay">
-    <div class="modal-content glass-panel" onclick="event.stopPropagation()">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header">
             <h3>Edit Profile</h3>
             <button type="button" class="close-modal" onclick="closeEditModal()">&times;</button>
@@ -66,7 +66,7 @@
         <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="modal-body">
-                <div class="form-group full-width" style="text-align: center; margin-bottom: 24px;">
+                <div class="form-group full-width" style="text-align: center; margin-bottom: 12px;">
                     <div class="profile-image-section">
                         {% if profile.profile_picture %}
                         <img src="{{ profile.profile_picture.url }}" class="profile-avatar modal-avatar" />
