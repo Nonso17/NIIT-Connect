@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="{% static 'dashboard/css/manage_users.css' %}?v=5" />
 <link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}" />
 {% endblock %} {% block content %}
-<div class="glass-panel" style="padding: 32px; border-radius: 20px; overflow-x: auto; max-width: 900px">
+<div style="padding: 32px; border-radius: 20px; overflow-x: auto; max-width: 900px">
     {% if messages %} {% for message in messages %}
     <div class="message {{ message.tags }}">{{ message }}</div>
     {% endfor %} {% endif %}
@@ -145,7 +145,7 @@
 
     <!-- Add User Modal Overlay -->
     <div id="addUserModal" class="modal-overlay">
-        <div class="modal-content glass-panel" onclick="event.stopPropagation()">
+        <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <h3>Add New User</h3>
                 <button type="button" class="close-modal" onclick="closeAddUserModal()">&times;</button>
@@ -153,9 +153,9 @@
             <form action="{% url 'register_user' %}" method="POST">
                 {% csrf_token %}
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="modal-email">Email Address</label>
-                        <input type="email" id="modal-email" name="email" required placeholder="student@example.com" class="modern-input" />
+                    <div class="floating-group">
+                        <input type="email" id="modal-email" name="email" required class="floating-input" placeholder=" " />
+                        <label for="modal-email" class="floating-label">Email Address</label>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -169,7 +169,7 @@
 {% for user in users %}
 <!-- Student Profile Modal for user {{ user.id }} -->
 <div id="studentProfileModal-{{ user.id }}" class="modal-overlay" onclick="closeStudentModal({{ user.id }})">
-    <div class="modal-content glass-panel" onclick="event.stopPropagation()" style="padding: 0; overflow: hidden;">
+    <div class="modal-content" onclick="event.stopPropagation()" style="padding: 0; overflow: auto;">
         <div class="modal-header" style="padding: 24px 32px 0 32px;">
             <h3>Student Profile</h3>
             <button type="button" class="close-modal" onclick="closeStudentModal({{ user.id }})">&times;</button>
