@@ -6,7 +6,10 @@ class Post(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    content = models.TextField()
+    content = models.TextField(blank=True, null=True)
+
+    image = models.ImageField(upload_to='post_images/', blank=True, null=True)
+    link = models.URLField(max_length=500, blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 

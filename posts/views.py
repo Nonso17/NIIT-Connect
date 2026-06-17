@@ -9,10 +9,12 @@ def create_post(request):
     if request.method == "POST":
 
         content = request.POST.get("content")
+        link = request.POST.get("link")
+        image = request.FILES.get("image")
 
-        if content:
+        if content or link or image:
 
-            Post.objects.create(user=request.user, content=content)
+            Post.objects.create(user=request.user, content=content, link=link, image=image)
 
         return redirect("/dashboard/")
 

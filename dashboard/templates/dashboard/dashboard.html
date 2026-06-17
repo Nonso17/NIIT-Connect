@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% load static %} {% block title %}Dashboard | NIIT Connect{% endblock %} {% block content %}
 <div class="create-post glass-panel">
-    <form action="/posts/create/" method="POST">
+    <form action="/posts/create/" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="input-wrapper">
             <div class="user-avatar-mini">
@@ -19,7 +19,11 @@
                     <circle cx="12" cy="7" r="4" />
                 </svg>
             </div>
-            <textarea name="content" placeholder="What's on your mind?" required></textarea>
+            <textarea name="content" placeholder="What's on your mind?"></textarea>
+        </div>
+        <div class="post-attachments" style="display: flex; gap: 10px; margin-bottom: 15px; margin-left: 45px;">
+            <input type="file" name="image" accept="image/*" class="attachment-input" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid var(--color-border); background: var(--color-surface-hover);">
+            <input type="url" name="link" placeholder="Add a link (optional)" class="attachment-input" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid var(--color-border); background: var(--color-surface-hover); color: var(--color-text);">
         </div>
         <div class="form-actions">
             <button type="submit" class="btn-primary">
@@ -87,7 +91,19 @@
                 </svg>
             </button>
         </div>
-        <div class="post-content">{{ post.content }}</div>
+        {% if post.content %}
+            <div class="post-content">{{ post.content }}</div>
+        {% endif %}
+        {% if post.image %}
+            <div class="post-image" style="margin-top: 15px; text-align: center;">
+                <img src="{{ post.image.url }}" alt="Post image" style="max-width: 100%; border-radius: 8px;">
+            </div>
+        {% endif %}
+        {% if post.link %}
+            <div class="post-link" style="margin-top: 15px;">
+                <a href="{{ post.link }}" target="_blank" rel="noopener noreferrer" style="color: #3b82f6; word-break: break-all;">{{ post.link }}</a>
+            </div>
+        {% endif %}
     </div>
     {% empty %}
     <div class="post-card glass-panel empty-state">
