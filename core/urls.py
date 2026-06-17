@@ -38,6 +38,7 @@ urlpatterns = [
     path("admin-panel/", dashboard_views.admin_panel, name="admin_panel"),
     path("admin-panel/register/", account_views.register_view, name="register_user"),
     path("admin-panel/manage/", dashboard_views.manage_users, name="manage_users"),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 if settings.DEBUG:

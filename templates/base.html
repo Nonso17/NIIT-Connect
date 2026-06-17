@@ -279,6 +279,83 @@
                 });
             });
         </script>
+        
+        <!-- Global Profile Modal -->
+        <div id="globalProfileModal" class="modal-overlay" onclick="closeGlobalProfile()">
+            <div class="modal-content" onclick="event.stopPropagation()" style="padding: 0; overflow: auto; max-width: 500px;">
+                <div class="modal-header" style="padding: 24px 32px 0 32px;">
+                    <h3>Student Profile</h3>
+                    <button type="button" class="close-modal" onclick="closeGlobalProfile()">&times;</button>
+                </div>
+                <div class="modal-body" style="padding: 24px 32px 32px 32px;">
+                    <div class="profile-header">
+                        <div class="profile-avatar-wrapper">
+                            <img id="globalProfileAvatar" src="{% static 'images/default-avatar.png' %}" alt="Profile Picture" class="profile-avatar modal-avatar" style="width: 90px; height: 90px;" />
+                        </div>
+                        <div class="profile-title">
+                            <h1 id="globalProfileName" class="user-name" style="font-size: 24px; margin-bottom: 4px;">Loading...</h1>
+                            <p id="globalProfileEmail" class="user-email" style="font-size: 14px;">Loading...</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-details-grid" style="margin-top: 24px;">
+                        <div class="detail-card">
+                            <div class="detail-label">Phone Number</div>
+                            <div id="globalProfileNumber" class="detail-value">Loading...</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">Program</div>
+                            <div id="globalProfileProgram" class="detail-value">Loading...</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">Year</div>
+                            <div id="globalProfileYear" class="detail-value">Loading...</div>
+                        </div>
+                        <div class="detail-card full-width">
+                            <div class="detail-label">Bio</div>
+                            <div id="globalProfileBio" class="detail-value bio-text">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function openGlobalProfile(userId) {
+                // Show modal with loading state
+                const modal = document.getElementById('globalProfileModal');
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+
+                // Fetch data
+                fetch(`/accounts/api/profile/${userId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('globalProfileName').innerText = (data.first_name || data.last_name) ? `${data.first_name} ${data.last_name}` : 'Unknown';
+                        document.getElementById('globalProfileEmail').innerText = data.email || 'No email';
+                        document.getElementById('globalProfileNumber').innerText = data.number || 'Not provided';
+                        document.getElementById('globalProfileProgram').innerText = data.program || 'Not provided';
+                        document.getElementById('globalProfileYear').innerText = data.year || 'Not provided';
+                        document.getElementById('globalProfileBio').innerText = data.bio || 'No bio available.';
+                        
+                        const avatarImg = document.getElementById('globalProfileAvatar');
+                        if (data.profile_picture) {
+                            avatarImg.src = data.profile_picture;
+                        } else {
+                            avatarImg.src = "{% static 'images/default-avatar.png' %}";
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching profile:', error);
+                        document.getElementById('globalProfileName').innerText = "Error loading profile";
+                    });
+            }
+
+            function closeGlobalProfile() {
+                document.getElementById('globalProfileModal').classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        </script>
         {% block extra_js %}{% endblock %}
     </body>
 </html>

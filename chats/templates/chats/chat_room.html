@@ -1,117 +1,138 @@
-{% load static %}
-<!doctype html>
-<html lang="en">
+{% extends 'base.html' %} 
+{% load static %} 
 
-<head>
-    <meta charset="UTF-8" />
-    <title>Chat Room</title>
-    <link rel="stylesheet" href="{% static 'chats/css/chat.css' %}" />
-</head>
+{% block title %}Chat with {{ other_user.username }} | NIIT Connect{% endblock %} 
 
-<body>
-    <div class="navbar">
-        <a href="{% url 'chat_inbox' %}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                <path d="M15 18l-6-6 6-6" />
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'chats/css/chat.css' %}" />
+{% endblock %} 
+
+{% block content %}
+<div class="chat-wrapper glass-panel">
+    <!-- Chat Header -->
+    <div class="chat-header">
+        <a href="{% url 'chat_inbox' %}" class="back-btn" title="Back to Inbox">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
         </a>
-
-        <h2 class="name">NIIT Connect</h2>
-
-        <div class="notification">
-            <a href="notifications.html">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 2C10 2 8 4 8 6V7C8 10 7 11 5 13V14H19V13C17 11 16 10 16 7V6C16 4 14 2 12 2Z" fill="white" />
-                    <circle cx="12" cy="18" r="2" fill="white" />
-                </svg>
-            </a>
-        </div>
-
-        <div class="profileicon">
-            <a href="/accounts/profile/">
-                <svg width="30" height="30" viewBox="0 0 24 24">
-                    <circle cx="12" cy="8" r="4" fill="white" />
-                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="white" />
-                </svg>
-            </a>
-        </div>
-    </div>
-
-    <div class="chat-container">
-
-        <!-- LEFT: user info / header -->
-        <div class="chat-header">
-            <h2>Chat with {{ receiver.username }}</h2>
-        </div>
-
-        <!-- MESSAGES AREA -->
-        <div class="chat-box">
-            {% for message in messages %}
-                {% if message.sender == request.user %}
-
-                    <!-- SENT MESSAGE -->
-                    <div class="message sent">
-                        <p>{{ message.content }}</p>
-                        <small>{{ message.created_at|date:"H:i" }}</small>
-                    </div>
-
+        <div class="header-user-info">
+            <div class="header-avatar-wrapper">
+                {% if other_user.studentprofile.profile_picture %}
+                    <img src="{{ other_user.studentprofile.profile_picture.url }}" class="header-avatar" style="cursor:pointer;" onclick="openGlobalProfile({{ other_user.id }})" />
                 {% else %}
-
-                    <!-- RECEIVED MESSAGE -->
-                    <div class="message received">
-                        <p>{{ message.content }}</p>
-                        <small>{{ message.created_at|date:"H:i" }}</small>
-                    </div>
-
+                    <img src="{% static 'images/default-avatar.png' %}" class="header-avatar" style="cursor:pointer;" onclick="openGlobalProfile({{ other_user.id }})" />
                 {% endif %}
-            {% empty %}
-
-                <p class="no-messages">No messages yet. Say hi 👋</p>
-
-            {% endfor %}
+            </div>
+            <div class="header-details">
+                <h3>{{ other_user.first_name }} {{ other_user.last_name|default:other_user.username }}</h3>
+                <small>Active</small>
+            </div>
         </div>
-
-        <!-- INPUT BOX -->
-        <form method="POST" class="chat-input">
-            {% csrf_token %}
-
-            <input type="text" name="content" placeholder="Type a message..." required />
-
-            <button type="submit">Send</button>
-        </form>
-
     </div>
 
-    <script>
-        function loadMessages() {
-            fetch("/chats/messages/{{ other_user.id }}/")
-                .then(response => response.json())
-                .then(data => {
+    <!-- Messages Area -->
+    <div class="chat-messages" id="chatBox">
+        {% for message in messages %}
+            {% if message.sender == request.user %}
+                <div class="message-row sent-row">
+                    <div class="message-bubble sent-bubble">
+                        <p>{{ message.content }}</p>
+                        <span class="message-time">{{ message.timestamp|date:"H:i" }}</span>
+                    </div>
+                </div>
+            {% else %}
+                <div class="message-row received-row">
+                    <div class="message-bubble received-bubble">
+                        <p>{{ message.content }}</p>
+                        <span class="message-time">{{ message.timestamp|date:"H:i" }}</span>
+                    </div>
+                </div>
+            {% endif %}
+        {% empty %}
+            <div class="empty-chat" id="emptyChatPlaceholder">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5; margin-bottom:16px;">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <p>No messages yet. Say hi 👋</p>
+            </div>
+        {% endfor %}
+    </div>
 
-                    const box = document.querySelector(".chat-box");
+    <!-- Input Area -->
+    <div class="chat-input-area">
+        <form method="POST" class="chat-form">
+            {% csrf_token %}
+            <input type="text" name="content" placeholder="Type your message..." required autocomplete="off" class="message-input" />
+            <button type="submit" class="send-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </form>
+    </div>
+</div>
 
-                    box.innerHTML = "";
+{% endblock %}
 
+{% block extra_js %}
+<script>
+    const currentUsername = "{{ request.user.username }}";
+    const chatBox = document.getElementById("chatBox");
+
+    function scrollToBottom() {
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Initial scroll
+    scrollToBottom();
+
+    function loadMessages() {
+        fetch("/chats/messages/{{ other_user.id }}/")
+            .then(response => response.json())
+            .then(data => {
+                let newHTML = "";
+                
+                if (data.length === 0) {
+                    newHTML = `
+                        <div class="empty-chat" id="emptyChatPlaceholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5; margin-bottom:16px;">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            <p>No messages yet. Say hi 👋</p>
+                        </div>
+                    `;
+                } else {
                     data.forEach(msg => {
-                        box.innerHTML += `
-                            <div style="margin-bottom:10px;">
-                                <strong>${msg.sender}</strong>: ${msg.content}
-                                <small style="color:gray;">${msg.time}</small>
+                        const isSent = msg.sender === currentUsername;
+                        const rowClass = isSent ? "sent-row" : "received-row";
+                        const bubbleClass = isSent ? "sent-bubble" : "received-bubble";
+                        
+                        newHTML += `
+                            <div class="message-row ${rowClass}">
+                                <div class="message-bubble ${bubbleClass}">
+                                    <p>${msg.content}</p>
+                                    <span class="message-time">${msg.time}</span>
+                                </div>
                             </div>
                         `;
                     });
+                }
 
-                    // auto scroll
-                    box.scrollTop = box.scrollHeight;
-                });
-        }
+                // Check if we need to auto-scroll (if user is already near bottom)
+                const isNearBottom = chatBox.scrollHeight - chatBox.scrollTop - chatBox.clientHeight < 50;
+                
+                chatBox.innerHTML = newHTML;
 
-        // run every 3 seconds
-        setInterval(loadMessages, 3000);
+                if (isNearBottom) {
+                    scrollToBottom();
+                }
+            });
+    }
 
-        // initial load
-        loadMessages();
-    </script>
-    
-</body>
-</html>
+    // poll every 3 seconds
+    setInterval(loadMessages, 3000);
+</script>
+{% endblock %}

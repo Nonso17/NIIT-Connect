@@ -1,54 +1,44 @@
-{% load static %}
-<!doctype html>
-<html>
-    <head>
-        <title>Inbox</title>
-        <link rel="stylesheet" href="{% static 'chats/css/inbox.css' %}" />
-    </head>
-    <body>
-        <div class="navbar">
-            <a href="{% url 'student_dashboard' %}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                    <path d="M15 18l-6-6 6-6" />
-                </svg>
-            </a>
+{% extends 'base.html' %} 
+{% load static %} 
 
-            <h2 class="name">NIIT Connect</h2>
+{% block title %}Inbox | NIIT Connect{% endblock %} 
 
-            <div class="notification">
-                <a href="notifications.html">
-                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2C10 2 8 4 8 6V7C8 10 7 11 5 13V14H19V13C17 11 16 10 16 7V6C16 4 14 2 12 2Z" fill="white" />
-                        <circle cx="12" cy="18" r="2" fill="white" />
-                    </svg>
-                </a>
-            </div>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'chats/css/inbox.css' %}" />
+{% endblock %} 
 
-            <div class="profileicon">
-                <a href="/accounts/profile/">
-                    <svg width="30" height="30" viewBox="0 0 24 24">
-                        <circle cx="12" cy="8" r="4" fill="white" />
-                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="white" />
-                    </svg>
-                </a>
-            </div>
-        </div>
-
-        <h2>Your Inbox</h2>
+{% block content %}
+<div class="inbox-container">
+    <div class="inbox-card">
+        <h2 class="section-title" style="margin-bottom: 24px; text-align: left;">Your Inbox</h2>
 
         <div class="user-list">
             {% for user in users %}
             <a class="user-card" href="{% url 'chat_room' user.id %}">
-                <div class="avatar"></div>
-
-                <div class="info">
-                    <strong>{{ user.username }}</strong>
-                    <p>Tap to chat</p>
+                <div class="avatar-wrapper">
+                    {% if user.studentprofile.profile_picture %}
+                        <img src="{{ user.studentprofile.profile_picture.url }}" class="inbox-avatar" style="cursor:pointer;" onclick="event.preventDefault(); event.stopPropagation(); openGlobalProfile({{ user.id }})" />
+                    {% else %}
+                        <img src="{% static 'images/default-avatar.png' %}" class="inbox-avatar" style="cursor:pointer;" onclick="event.preventDefault(); event.stopPropagation(); openGlobalProfile({{ user.id }})" />
+                    {% endif %}
                 </div>
+                <div class="info">
+                    <strong class="inbox-username">{{ user.first_name }} {{ user.last_name|default:user.username }}</strong>
+                    <p class="inbox-subtext">Tap to chat</p>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
             </a>
             {% empty %}
-            <p>No users found.</p>
+            <div class="empty-state" style="text-align: center; padding: 40px; color: var(--color-text-muted);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5; margin-bottom:16px;">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <p>No other users found. It's quiet here!</p>
+            </div>
             {% endfor %}
         </div>
-    </body>
-</html>
+    </div>
+</div>
+{% endblock %}

@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -126,6 +128,29 @@ def profile_view(request):
     return render(request, "accounts/profile.html", {
         "profile": profile
     })
+
+
+# -----------------------------
+# PROFILE API
+# -----------------------------
+@login_required
+def profile_api(request, user_id):
+    user_obj = get_object_or_404(User, id=user_id)
+    profile, created = StudentProfile.objects.get_or_create(user=user_obj)
+    
+    data = {
+        "id": user_obj.id,
+        "email": user_obj.email,
+        "first_name": user_obj.first_name,
+        "last_name": user_obj.last_name,
+        "full_name": profile.full_name,
+        "number": profile.number,
+        "program": profile.program,
+        "year": profile.year,
+        "bio": profile.bio if hasattr(profile, 'bio') else "",
+        "profile_picture": profile.profile_picture.url if profile.profile_picture else None,
+    }
+    return JsonResponse(data)
 
 
 # -----------------------------
