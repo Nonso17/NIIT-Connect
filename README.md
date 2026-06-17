@@ -1,5 +1,9 @@
 # NIIT Connect
 
+![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)
+![Django Version](https://img.shields.io/badge/django-6.0-0C4B33)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 A modern, responsive Django-based social platform designed for students to connect, share posts, and interact within a learning community. NIIT Connect features a sleek glassmorphism UI, a global feed, direct messaging, and a comprehensive administrative dashboard.
 
 ## Features
