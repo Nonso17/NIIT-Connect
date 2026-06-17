@@ -52,26 +52,19 @@
     <div class="post-card glass-panel">
         <div class="post-header">
             <div class="post-user-info">
-                <div class="user-avatar">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg>
-                </div>
-                <div class="user-details">
-                    <strong>{{ post.user.username }}</strong>
-                    <small>{{ post.created_at }}</small>
-                </div>
+                <button onclick="openStudentModal({{ post.user.id }})" style="display:flex; align-items:center; gap:12px; background:none; border:none; cursor:pointer; color:inherit; padding:0; text-align:left;">
+                    <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden;">
+                        {% if post.user.studentprofile.profile_picture %}
+                            <img src="{{ post.user.studentprofile.profile_picture.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'images/default-avatar.png' %}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% endif %}
+                    </div>
+                    <div class="user-details">
+                        <strong>{{ post.user.first_name }} {{ post.user.last_name|default:post.user.username }}</strong>
+                        <small>{{ post.created_at|timesince }} ago</small>
+                    </div>
+                </button>
             </div>
             <button class="icon-btn more-btn">
                 <svg
@@ -129,4 +122,63 @@
     </div>
     {% endfor %}
 </div>
+
+<!-- Profile Modals for Feed Users -->
+{% for post in posts %}
+<div id="studentProfileModal-{{ post.user.id }}" class="modal-overlay" onclick="closeStudentModal({{ post.user.id }})">
+    <div class="modal-content" onclick="event.stopPropagation()" style="padding: 0; overflow: auto;">
+        <div class="modal-header" style="padding: 24px 32px 0 32px;">
+            <h3>Student Profile</h3>
+            <button type="button" class="close-modal" onclick="closeStudentModal({{ post.user.id }})">&times;</button>
+        </div>
+        <div class="modal-body" style="padding: 24px 32px 32px 32px;">
+            <div class="profile-header">
+                <div class="profile-avatar-wrapper">
+                    {% if post.user.studentprofile.profile_picture %}
+                        <img src="{{ post.user.studentprofile.profile_picture.url }}" alt="Profile Picture" class="profile-avatar modal-avatar" style="width: 90px; height: 90px;" />
+                    {% else %}
+                        <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar" class="profile-avatar modal-avatar" style="width: 90px; height: 90px;" />
+                    {% endif %}
+                </div>
+                <div class="profile-title">
+                    <h1 class="user-name" style="font-size: 24px; margin-bottom: 4px;">{{ post.user.first_name }} {{ post.user.last_name|default:post.user.username }}</h1>
+                    <p class="user-email" style="font-size: 14px;">{{ post.user.email }}</p>
+                </div>
+            </div>
+
+            <div class="profile-details-grid" style="margin-top: 24px;">
+                <div class="detail-card">
+                    <div class="detail-label">Phone Number</div>
+                    <div class="detail-value">{{ post.user.studentprofile.number|default:"Not provided" }}</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-label">Program</div>
+                    <div class="detail-value">{{ post.user.studentprofile.program|default:"Not provided" }}</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-label">Year</div>
+                    <div class="detail-value">{{ post.user.studentprofile.year|default:"Not provided" }}</div>
+                </div>
+                <div class="detail-card full-width">
+                    <div class="detail-label">Bio</div>
+                    <div class="detail-value bio-text">{{ post.user.studentprofile.bio|default:"No bio available." }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<script>
+    function openStudentModal(userId) {
+        document.getElementById('studentProfileModal-' + userId).classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeStudentModal(userId) {
+        document.getElementById('studentProfileModal-' + userId).classList.remove('active');
+        document.body.style.overflow = '';
+    }
+</script>
+
 {% endblock %}
