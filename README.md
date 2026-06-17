@@ -2,7 +2,7 @@
 
 A modern, responsive Django-based social platform designed for students to connect, share posts, and interact within a learning community. NIIT Connect features a sleek glassmorphism UI, a global feed, direct messaging, and a comprehensive administrative dashboard.
 
-## ✨ Features
+## Features
 
 - **Authentication & User Management**: Secure registration, login, and password management.
 - **Student Profiles**: Customizable profiles with avatars, bios, and program details.
@@ -12,14 +12,14 @@ A modern, responsive Django-based social platform designed for students to conne
 - **Admin Dashboard**: Analytics, metrics, and tools for managing users and platform activity.
 - **Modern UI/UX**: Fully responsive, clean aesthetic utilizing CSS glassmorphism, floating input labels, and fluid layouts.
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Backend**: Python, Django 6.0
 - **Database**: SQLite (default, easily adaptable to PostgreSQL)
 - **Frontend**: HTML5, Vanilla CSS3, Vanilla JavaScript
 - **Static File Serving**: WhiteNoise
 
-## 🚀 Getting Started
+## Getting Started
 
 Follow these steps to set up the project locally for development and testing.
 
@@ -65,7 +65,7 @@ Follow these steps to set up the project locally for development and testing.
 6. **Access the application:**
    Open your browser and navigate to `http://127.0.0.1:8000/`.
 
-## 📂 Project Structure
+## Project Structure
 
 This project follows a global front-end structure for ease of development:
 
@@ -90,14 +90,14 @@ NIIT-Connect/
 └── manage.py          # Django management script
 ```
 
-## 💻 Usage
+## Usage
 
 - **User Registration**: New users can register via the platform. After registering, they will be prompted to complete their profile (upload an avatar, set their program, etc.).
 - **Global Feed**: Users can navigate to the dashboard to view posts from others and share their own updates.
 - **Chat**: Users can click on another user's profile card or use the inbox to start a direct message thread.
 - **Admin**: Superusers can access the Admin Dashboard to view platform statistics and manage user accounts.
 
-## 🤝 Contributing
+## Contributing
 
 Contributions, issues, and feature requests are welcome! 
 
@@ -107,6 +107,6 @@ Contributions, issues, and feature requests are welcome!
 4. Push to the branch (`git push origin feature/AmazingFeature`).
 5. Open a Pull Request.
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License.
