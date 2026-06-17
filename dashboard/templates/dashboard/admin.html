@@ -79,5 +79,131 @@
             <p>{{ total_programs }}</p>
         </div>
     </div>
+
+    <div class="card glass-panel">
+        <div class="card-icon" style="background: var(--color-primary-blue-light); color: var(--color-primary-blue-dark);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        </div>
+        <div class="card-info">
+            <h3>Total Posts</h3>
+            <p>{{ total_posts }}</p>
+        </div>
+    </div>
+    
+    <div class="card glass-panel">
+        <div class="card-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--color-success);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </div>
+        <div class="card-info">
+            <h3>Total Messages</h3>
+            <p>{{ total_messages }}</p>
+        </div>
+    </div>
+
+    <div class="card glass-panel">
+        <div class="card-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--color-warning);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <div class="card-info">
+            <h3>Profile Completion</h3>
+            <p>{{ profile_completion_rate }}%</p>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <!-- Left Column -->
+    <div class="dashboard-col">
+        <!-- Recent Users Table -->
+        <div class="glass-panel content-section">
+            <h2 class="section-title">Recently Joined Users</h2>
+            <div class="table-responsive">
+                <table class="modern-table">
+                    <tr>
+                        <th>User</th>
+                        <th style="text-align: right;">Date Joined</th>
+                    </tr>
+                    {% for u in recent_users %}
+                    <tr>
+                        <td style="display:flex; align-items:center; gap:12px;">
+                            {% if u.studentprofile.profile_picture %}
+                                <img src="{{ u.studentprofile.profile_picture.url }}" style="width:36px; height:36px; border-radius:50%; object-fit:cover;">
+                            {% else %}
+                                <img src="{% static 'images/default-avatar.png' %}" style="width:36px; height:36px; border-radius:50%; object-fit:cover;">
+                            {% endif %}
+                            <div>
+                                <strong style="color:var(--color-text-main); font-size:14px;">{{ u.first_name }} {{ u.last_name|default:u.username }}</strong><br>
+                                <small style="color:var(--color-text-muted);">{{ u.email }}</small>
+                            </div>
+                        </td>
+                        <td style="text-align: right;"><span class="badge-pill">{{ u.date_joined|date:"M d, Y" }}</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="2" style="text-align:center; padding: 24px; color: var(--color-text-muted);">No recent users</td></tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <!-- Program Breakdown -->
+        <div class="glass-panel content-section">
+            <h2 class="section-title">Top Programs</h2>
+            <ul class="program-list">
+                {% for p in programs_breakdown %}
+                <li class="program-item">
+                    <span class="program-name">{{ p.program }}</span>
+                    <span class="program-count badge-pill">{{ p.count }} Student{% if p.count != 1 %}s{% endif %}</span>
+                </li>
+                {% empty %}
+                <li class="program-item" style="justify-content: center; color: var(--color-text-muted);">No program data available</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="dashboard-col">
+        <!-- Quick Actions -->
+        <div class="glass-panel content-section">
+            <h2 class="section-title">Quick Actions</h2>
+            <div class="actions-grid">
+                <a href="{% url 'manage_users' %}" class="btn-primary" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    Manage Users
+                </a>
+                <a href="/dashboard/" class="btn-secondary" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; border: 1px solid var(--color-border-light);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                    View Global Feed
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Posts Feed -->
+        <div class="glass-panel content-section">
+            <h2 class="section-title">Recent Posts</h2>
+            <div class="feed-list">
+                {% for post in recent_posts %}
+                <div class="feed-item">
+                    <div class="feed-header">
+                        {% if post.user.studentprofile.profile_picture %}
+                            <img src="{{ post.user.studentprofile.profile_picture.url }}" class="feed-avatar">
+                        {% else %}
+                            <img src="{% static 'images/default-avatar.png' %}" class="feed-avatar">
+                        {% endif %}
+                        <div class="feed-meta">
+                            <strong style="color:var(--color-text-main);">{{ post.user.first_name }} {{ post.user.last_name|default:post.user.username }}</strong>
+                            <small style="color:var(--color-text-muted);">{{ post.created_at|timesince }} ago</small>
+                        </div>
+                    </div>
+                    <div class="feed-content">
+                        {{ post.content|truncatewords:20 }}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="feed-item" style="text-align:center; color: var(--color-text-muted);">No recent posts</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
