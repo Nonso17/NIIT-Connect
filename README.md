@@ -36,7 +36,7 @@ Follow these steps to set up the project locally for development and testing.
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Nonso17/NIIT-Connect.git
    cd NIIT-Connect
    ```
 
