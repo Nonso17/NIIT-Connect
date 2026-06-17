@@ -328,10 +328,10 @@
                 document.body.style.overflow = 'hidden';
 
                 // Fetch data
-                fetch(`/accounts/api/profile/${userId}/`)
+                fetch('/accounts/api/profile/' + userId + '/')
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('globalProfileName').innerText = (data.first_name || data.last_name) ? `${data.first_name} ${data.last_name}` : 'Unknown';
+                        document.getElementById('globalProfileName').innerText = (data.first_name || data.last_name) ? data.first_name + ' ' + data.last_name : 'Unknown';
                         document.getElementById('globalProfileEmail').innerText = data.email || 'No email';
                         document.getElementById('globalProfileNumber').innerText = data.number || 'Not provided';
                         document.getElementById('globalProfileProgram').innerText = data.program || 'Not provided';
@@ -355,6 +355,19 @@
                 document.getElementById('globalProfileModal').classList.remove('active');
                 document.body.style.overflow = '';
             }
+
+            // Event delegation: handle clicks on any .clickable-avatar element
+            document.addEventListener('click', function(e) {
+                const avatar = e.target.closest('.clickable-avatar');
+                if (avatar) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const userId = avatar.getAttribute('data-profile-id');
+                    if (userId) {
+                        openGlobalProfile(userId);
+                    }
+                }
+            });
         </script>
         {% block extra_js %}{% endblock %}
     </body>

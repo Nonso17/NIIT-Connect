@@ -127,9 +127,9 @@
                     <tr>
                         <td style="display:flex; align-items:center; gap:12px;">
                             {% if u.studentprofile.profile_picture %}
-                                <img src="{{ u.studentprofile.profile_picture.url }}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; cursor:pointer;" onclick="openGlobalProfile({{ u.id }})">
+                                <img src="{{ u.studentprofile.profile_picture.url }}" style="width:36px; height:36px; border-radius:50%; object-fit:cover;" class="clickable-avatar" data-profile-id="{{ u.id }}">
                             {% else %}
-                                <img src="{% static 'images/default-avatar.png' %}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; cursor:pointer;" onclick="openGlobalProfile({{ u.id }})">
+                                <img src="{% static 'images/default-avatar.png' %}" style="width:36px; height:36px; border-radius:50%; object-fit:cover;" class="clickable-avatar" data-profile-id="{{ u.id }}">
                             {% endif %}
                             <div>
                                 <strong style="color:var(--color-text-main); font-size:14px;">{{ u.first_name }} {{ u.last_name|default:u.username }}</strong><br>
@@ -186,9 +186,9 @@
                 <div class="feed-item">
                     <div class="feed-header">
                         {% if post.user.studentprofile.profile_picture %}
-                            <img src="{{ post.user.studentprofile.profile_picture.url }}" class="feed-avatar" style="cursor:pointer;" onclick="openGlobalProfile({{ post.user.id }})">
+                            <img src="{{ post.user.studentprofile.profile_picture.url }}" class="feed-avatar clickable-avatar" data-profile-id="{{ post.user.id }}">
                         {% else %}
-                            <img src="{% static 'images/default-avatar.png' %}" class="feed-avatar" style="cursor:pointer;" onclick="openGlobalProfile({{ post.user.id }})">
+                            <img src="{% static 'images/default-avatar.png' %}" class="feed-avatar clickable-avatar" data-profile-id="{{ post.user.id }}">
                         {% endif %}
                         <div class="feed-meta">
                             <strong style="color:var(--color-text-main);">{{ post.user.first_name }} {{ post.user.last_name|default:post.user.username }}</strong>

@@ -20,9 +20,9 @@
         <div class="header-user-info">
             <div class="header-avatar-wrapper">
                 {% if other_user.studentprofile.profile_picture %}
-                    <img src="{{ other_user.studentprofile.profile_picture.url }}" class="header-avatar" style="cursor:pointer;" onclick="openGlobalProfile({{ other_user.id }})" />
+                    <img src="{{ other_user.studentprofile.profile_picture.url }}" class="header-avatar clickable-avatar" data-profile-id="{{ other_user.id }}" />
                 {% else %}
-                    <img src="{% static 'images/default-avatar.png' %}" class="header-avatar" style="cursor:pointer;" onclick="openGlobalProfile({{ other_user.id }})" />
+                    <img src="{% static 'images/default-avatar.png' %}" class="header-avatar clickable-avatar" data-profile-id="{{ other_user.id }}" />
                 {% endif %}
             </div>
             <div class="header-details">

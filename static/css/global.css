@@ -44,6 +44,11 @@ body {
     color: var(--color-text-main);
 }
 
+/* Clickable avatar elements (opens global profile modal) */
+.clickable-avatar {
+    cursor: pointer;
+}
+
 /* ===== INPUT FIELDS (Floating Labels) ===== */
 .floating-group {
     position: relative;

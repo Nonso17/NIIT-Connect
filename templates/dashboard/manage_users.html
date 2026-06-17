@@ -64,7 +64,7 @@
             <td style="font-weight: 500; color: var(--color-text-main)">{{user.email}}</td>
             <td>
                 <div class="actions-cell" style="justify-content: flex-end">
-                    <button type="button" onclick="openGlobalProfile({{ user.id }})" class="action-btn" title="View Profile" style="border:none; background:transparent; cursor:pointer; padding:8px;">
+                    <button type="button" class="action-btn clickable-avatar" data-profile-id="{{ user.id }}" title="View Profile" style="border:none; background:transparent; cursor:pointer; padding:8px;">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"

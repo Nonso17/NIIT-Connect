@@ -17,9 +17,9 @@
             <a class="user-card" href="{% url 'chat_room' user.id %}">
                 <div class="avatar-wrapper">
                     {% if user.studentprofile.profile_picture %}
-                        <img src="{{ user.studentprofile.profile_picture.url }}" class="inbox-avatar" style="cursor:pointer;" onclick="event.preventDefault(); event.stopPropagation(); openGlobalProfile({{ user.id }})" />
+                        <img src="{{ user.studentprofile.profile_picture.url }}" class="inbox-avatar clickable-avatar" data-profile-id="{{ user.id }}" />
                     {% else %}
-                        <img src="{% static 'images/default-avatar.png' %}" class="inbox-avatar" style="cursor:pointer;" onclick="event.preventDefault(); event.stopPropagation(); openGlobalProfile({{ user.id }})" />
+                        <img src="{% static 'images/default-avatar.png' %}" class="inbox-avatar clickable-avatar" data-profile-id="{{ user.id }}" />
                     {% endif %}
                 </div>
                 <div class="info">
