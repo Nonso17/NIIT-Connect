@@ -59,6 +59,8 @@ const chatBox = document.getElementById("chatBox");
 const currentUsername = "{{ request.user.username }}";
 const csrfToken = "{{ csrf_token }}";
 const otherUserId = "{{ other_user.id }}";
+let editingMessageId = null;
+const messagesMap = {};
 
 // ----------------------
 // LOAD MESSAGES
@@ -72,6 +74,7 @@ function loadMessages() {
             chatBox.innerHTML = "";
 
             data.forEach(msg => {
+                messagesMap[msg.id] = msg.content;
                 const isMe = msg.sender === currentUsername;
 
                 const div = document.createElement("div");
@@ -129,26 +132,14 @@ function deleteMessage(id) {
 // EDIT MESSAGE
 // ----------------------
 function editMessage(id) {
-    const newText = prompt("Edit message:");
-
-    if (!newText) return;
-
-    fetch(`/chats/edit/${id}/`, {
-        method: "POST",
-        headers: {
-            "X-CSRFToken": csrfToken,
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: `content=${encodeURIComponent(newText)}`
-    })
-    .then(res => res.json())
-    .then(() => {
-        loadMessages();
-    });
+    editingMessageId = id;
+    const input = document.getElementById("messageInput");
+    input.value = messagesMap[id] || "";
+    input.focus();
 }
 
 // ----------------------
-// SEND MESSAGE
+// SEND OR UPDATE MESSAGE
 // ----------------------
 document.querySelector("form").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -156,18 +147,37 @@ document.querySelector("form").addEventListener("submit", function(e) {
     const input = document.getElementById("messageInput");
     if (!input.value.trim()) return;
 
-    fetch(window.location.href, {
-        method: "POST",
-        headers: {
-            "X-CSRFToken": csrfToken,
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: `content=${encodeURIComponent(input.value)}`
-    }).then(() => {
-        input.value = "";
-        loadMessages();
-        setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 100);
-    });
+    if (editingMessageId) {
+        // Update existing message
+        fetch(`/chats/edit/${editingMessageId}/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `content=${encodeURIComponent(input.value)}`
+        })
+        .then(res => res.json())
+        .then(() => {
+            input.value = "";
+            editingMessageId = null;
+            loadMessages();
+        });
+    } else {
+        // Send new message
+        fetch(window.location.href, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `content=${encodeURIComponent(input.value)}`
+        }).then(() => {
+            input.value = "";
+            loadMessages();
+            setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 100);
+        });
+    }
 });
 
 // initial load + polling
