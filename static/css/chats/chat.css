@@ -205,3 +205,11 @@
         border-radius: 0;
     }
 }
+
+
+.edited-label {
+    font-size: 10px;
+    color: gray;
+    margin-left: 6px;
+    font-style: italic;
+}

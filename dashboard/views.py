@@ -3,10 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.models import User
 from django.contrib import messages
-from accounts.models import StudentProfile   # ✅ correct model
+from accounts.models import StudentProfile
 from posts.models import Post
-from chats.models import Message
-from django.db.models import Count
 import random
 import string
 
@@ -15,7 +13,6 @@ import string
 @login_required
 def dashboard_home(request):
     posts = Post.objects.all().order_by("-created_at")
-
     return render(request, "dashboard/dashboard.html", {"posts": posts})
 
 
@@ -24,33 +21,14 @@ def admin_panel(request):
     active_users = User.objects.filter(is_active=True).count()
     staff_users = User.objects.filter(is_staff=True).count()
 
+    # FIX: program is the correct field in StudentProfile
     total_programs = StudentProfile.objects.values("program").distinct().count()
-
-    total_posts = Post.objects.count()
-    recent_posts = Post.objects.select_related('user').all().order_by("-created_at")[:5]
-    
-    total_messages = Message.objects.count()
-    
-    completed_profiles = StudentProfile.objects.filter(profile_completed=True).count()
-    profile_completion_rate = 0
-    if total_users > 0:
-        profile_completion_rate = int((completed_profiles / total_users) * 100)
-        
-    recent_users = User.objects.filter(is_staff=False).order_by("-date_joined")[:5]
-    
-    programs_breakdown = StudentProfile.objects.exclude(program__isnull=True).exclude(program="").values("program").annotate(count=Count("id")).order_by("-count")[:5]
 
     context = {
         "total_users": total_users,
         "active_users": active_users,
         "staff_users": staff_users,
         "total_programs": total_programs,
-        "total_posts": total_posts,
-        "recent_posts": recent_posts,
-        "total_messages": total_messages,
-        "profile_completion_rate": profile_completion_rate,
-        "recent_users": recent_users,
-        "programs_breakdown": programs_breakdown,
     }
 
     return render(request, "dashboard/admin.html", context)
@@ -64,8 +42,9 @@ def manage_users(request):
     else:
         users = User.objects.filter(is_staff=False)
 
+    # FIX: ensure profiles exist
     for user in users:
-        StudentProfile.objects.get_or_create(user=user)  # ✅ FIXED
+        StudentProfile.objects.get_or_create(user=user)
 
     return render(request, "dashboard/manage_users.html", {"users": users})
 
@@ -80,8 +59,7 @@ def delete_user(request, user_id):
 
 def edit_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
-
-    profile, created = StudentProfile.objects.get_or_create(user=user)  # ✅ FIXED
+    profile, created = StudentProfile.objects.get_or_create(user=user)
 
     if request.method == "POST":
         user.email = request.POST["email"]

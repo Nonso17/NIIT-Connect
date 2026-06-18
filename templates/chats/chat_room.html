@@ -1,138 +1,144 @@
-{% extends 'base.html' %} 
-{% load static %} 
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Chat with {{ other_user.username }} | NIIT Connect{% endblock %} 
+{% block title %}Chat with {{ other_user.username }} | NIIT Connect{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/chats/chat.css' %}" />
-{% endblock %} 
+{% endblock %}
 
 {% block content %}
 <div class="chat-wrapper glass-panel">
-    <!-- Chat Header -->
+
+    <!-- HEADER -->
     <div class="chat-header">
-        <a href="{% url 'chat_inbox' %}" class="back-btn" title="Back to Inbox">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-        </a>
-        <div class="header-user-info">
-            <div class="header-avatar-wrapper">
-                {% if other_user.studentprofile.profile_picture %}
-                    <img src="{{ other_user.studentprofile.profile_picture.url }}" class="header-avatar clickable-avatar" data-profile-id="{{ other_user.id }}" />
-                {% else %}
-                    <img src="{% static 'images/default-avatar.png' %}" class="header-avatar clickable-avatar" data-profile-id="{{ other_user.id }}" />
-                {% endif %}
-            </div>
-            <div class="header-details">
-                <h3>{{ other_user.first_name }} {{ other_user.last_name|default:other_user.username }}</h3>
-                <small>Active</small>
-            </div>
-        </div>
+        <a href="{% url 'chat_inbox' %}" class="back-btn">Back</a>
+        <h3>{{ other_user.username }}</h3>
     </div>
 
-    <!-- Messages Area -->
-    <div class="chat-messages" id="chatBox">
-        {% for message in messages %}
-            {% if message.sender == request.user %}
-                <div class="message-row sent-row">
-                    <div class="message-bubble sent-bubble">
-                        <p>{{ message.content }}</p>
-                        <span class="message-time">{{ message.timestamp|date:"H:i" }}</span>
-                    </div>
-                </div>
-            {% else %}
-                <div class="message-row received-row">
-                    <div class="message-bubble received-bubble">
-                        <p>{{ message.content }}</p>
-                        <span class="message-time">{{ message.timestamp|date:"H:i" }}</span>
-                    </div>
-                </div>
-            {% endif %}
-        {% empty %}
-            <div class="empty-chat" id="emptyChatPlaceholder">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5; margin-bottom:16px;">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-                <p>No messages yet. Say hi 👋</p>
-            </div>
-        {% endfor %}
-    </div>
+    <!-- MESSAGES -->
+    <div class="chat-messages" id="chatBox"></div>
 
-    <!-- Input Area -->
+    <!-- INPUT -->
     <div class="chat-input-area">
-        <form method="POST" class="chat-form">
+        <form method="POST">
             {% csrf_token %}
-            <input type="text" name="content" placeholder="Type your message..." required autocomplete="off" class="message-input" />
-            <button type="submit" class="send-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-            </button>
+            <input type="text" name="content" id="messageInput" placeholder="Type message..." required />
+            <button type="submit">Send</button>
         </form>
     </div>
-</div>
 
+</div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    const currentUsername = "{{ request.user.username }}";
-    const chatBox = document.getElementById("chatBox");
+const chatBox = document.getElementById("chatBox");
+const currentUsername = "{{ request.user.username }}";
+const csrfToken = "{{ csrf_token }}";
+const otherUserId = "{{ other_user.id }}";
 
-    function scrollToBottom() {
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
+// ----------------------
+// LOAD MESSAGES
+// ----------------------
+function loadMessages() {
+    fetch(`/chats/messages/${otherUserId}/`)
+    .then(res => res.json())
+    .then(data => {
+            console.log(data);
+            chatBox.innerHTML = "";
 
-    // Initial scroll
-    scrollToBottom();
+            data.forEach(msg => {
+                const isMe = msg.sender === currentUsername;
 
-    function loadMessages() {
-        fetch("/chats/messages/{{ other_user.id }}/")
-            .then(response => response.json())
-            .then(data => {
-                let newHTML = "";
-                
-                if (data.length === 0) {
-                    newHTML = `
-                        <div class="empty-chat" id="emptyChatPlaceholder">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5; margin-bottom:16px;">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                            </svg>
-                            <p>No messages yet. Say hi 👋</p>
+                const div = document.createElement("div");
+                div.className = `message-row ${isMe ? "sent-row" : "received-row"}`;
+
+                div.innerHTML = `
+                    <div class="message-bubble ${isMe ? "sent-bubble" : "received-bubble"}">
+                        <p>${msg.content}</p>
+
+                        <div class="message-meta">
+                            <span class="message-time">${msg.time}</span>
+
+                            ${msg.edited ? `<span class="edited-label">edited</span>` : ""}
                         </div>
-                    `;
-                } else {
-                    data.forEach(msg => {
-                        const isSent = msg.sender === currentUsername;
-                        const rowClass = isSent ? "sent-row" : "received-row";
-                        const bubbleClass = isSent ? "sent-bubble" : "received-bubble";
-                        
-                        newHTML += `
-                            <div class="message-row ${rowClass}">
-                                <div class="message-bubble ${bubbleClass}">
-                                    <p>${msg.content}</p>
-                                    <span class="message-time">${msg.time}</span>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
 
-                // Check if we need to auto-scroll (if user is already near bottom)
-                const isNearBottom = chatBox.scrollHeight - chatBox.scrollTop - chatBox.clientHeight < 50;
-                
-                chatBox.innerHTML = newHTML;
+                        ${isMe ? `
+                        <div class="message-actions">
+                            <button onclick="editMessage(${msg.id})">Edit</button>
+                            <button onclick="deleteMessage(${msg.id})">Delete</button>
+                        </div>
+                        ` : ""}
+                    </div>
+                `;
 
-                if (isNearBottom) {
-                    scrollToBottom();
-                }
+                chatBox.appendChild(div);
             });
-    }
+        });
+}
 
-    // poll every 3 seconds
-    setInterval(loadMessages, 3000);
+// ----------------------
+// DELETE MESSAGE
+// ----------------------
+function deleteMessage(id) {
+    fetch(`/chats/delete/${id}/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrfToken
+        }
+    })
+    .then(res => res.json())
+    .then(() => {
+        loadMessages();
+    });
+}
+
+// ----------------------
+// EDIT MESSAGE
+// ----------------------
+function editMessage(id) {
+    const newText = prompt("Edit message:");
+
+    if (!newText) return;
+
+    fetch(`/chats/edit/${id}/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrfToken,
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `content=${encodeURIComponent(newText)}`
+    })
+    .then(res => res.json())
+    .then(() => {
+        loadMessages();
+    });
+}
+
+// ----------------------
+// SEND MESSAGE
+// ----------------------
+document.querySelector("form").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const input = document.getElementById("messageInput");
+
+    fetch(window.location.href, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrfToken,
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `content=${encodeURIComponent(input.value)}`
+    }).then(() => {
+        input.value = "";
+        loadMessages();
+    });
+});
+
+// initial load + polling
+loadMessages();
+setInterval(loadMessages, 3000);
 </script>
 {% endblock %}
