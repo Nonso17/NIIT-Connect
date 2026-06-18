@@ -209,7 +209,55 @@
 
 .edited-label {
     font-size: 10px;
-    color: gray;
+    color: var(--color-text-muted);
     margin-left: 6px;
     font-style: italic;
+}
+
+/* Message Actions (Edit / Delete) */
+.message-actions {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 4px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.sent-bubble .message-actions {
+    right: 100%;
+    margin-right: 8px;
+}
+
+.received-bubble .message-actions {
+    left: 100%;
+    margin-left: 8px;
+}
+
+.message-row:hover .message-actions {
+    opacity: 1;
+}
+
+.action-icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.action-icon-btn:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-primary-blue);
 }
