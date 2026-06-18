@@ -19,22 +19,23 @@ def chat_room(request, user_id):
 
         if content:
             Message.objects.create(
-                sender=request.user,
-                receiver=other_user,
-                content=content
+                sender=request.user, receiver=other_user, content=content
             )
 
         return redirect("chat_room", user_id=other_user.id)
 
     messages = Message.objects.filter(
-        sender__in=[request.user, other_user],
-        receiver__in=[request.user, other_user]
+        sender__in=[request.user, other_user], receiver__in=[request.user, other_user]
     ).order_by("timestamp")
 
-    return render(request, "chats/chat_room.html", {
-        "other_user": other_user,
-        "messages": messages,
-    })
+    return render(
+        request,
+        "chats/chat_room.html",
+        {
+            "other_user": other_user,
+            "messages": messages,
+        },
+    )
 
 
 # ----------------------------
@@ -67,17 +68,17 @@ def edit_message(request, message_id):
     new_content = request.POST.get("content")
 
     message.content = new_content
-    message.edited = True   # ✅ THIS IS KEY
+    message.edited = True  # ✅ THIS IS KEY
     message.save()
 
-    return JsonResponse({
-        "id": message.id,
-        "content": message.content,
-        "edited": message.edited
-    })
+    return JsonResponse(
+        {"id": message.id, "content": message.content, "edited": message.edited}
+    )
+
 
 from django.db.models import Q
 from django.utils import timezone
+
 
 # ----------------------------
 # INBOX
@@ -85,23 +86,28 @@ from django.utils import timezone
 @login_required
 def inbox(request):
     users = User.objects.exclude(id=request.user.id)
-    
+
     inbox_users = []
     for u in users:
-        last_message = Message.objects.filter(
-            (Q(sender=request.user) & Q(receiver=u)) | 
-            (Q(sender=u) & Q(receiver=request.user))
-        ).order_by('-timestamp').first()
-        
-        inbox_users.append({
-            'user': u,
-            'last_message': last_message
-        })
-        
+        last_message = (
+            Message.objects.filter(
+                (Q(sender=request.user) & Q(receiver=u))
+                | (Q(sender=u) & Q(receiver=request.user))
+            )
+            .order_by("-timestamp")
+            .first()
+        )
+
+        inbox_users.append({"user": u, "last_message": last_message})
+
     # Sort by recent message first, users with no messages at the bottom
     inbox_users.sort(
-        key=lambda x: x['last_message'].timestamp if x['last_message'] else timezone.now().replace(year=1970), 
-        reverse=True
+        key=lambda x: (
+            x["last_message"].timestamp
+            if x["last_message"]
+            else timezone.now().replace(year=1970)
+        ),
+        reverse=True,
     )
 
     return render(request, "chats/inbox.html", {"inbox_users": inbox_users})
@@ -115,8 +121,7 @@ def fetch_messages(request, user_id):
     other_user = User.objects.get(id=user_id)
 
     messages = Message.objects.filter(
-        sender__in=[request.user, other_user],
-        receiver__in=[request.user, other_user]
+        sender__in=[request.user, other_user], receiver__in=[request.user, other_user]
     ).order_by("timestamp")
 
     data = [
@@ -125,7 +130,6 @@ def fetch_messages(request, user_id):
             "sender": m.sender.username,
             "content": m.content,
             "time": m.timestamp.strftime("%H:%M"),
-
             # ✅ ADD THIS LINE
             "edited": m.edited,
         }

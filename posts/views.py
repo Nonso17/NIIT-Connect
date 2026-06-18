@@ -14,7 +14,9 @@ def create_post(request):
 
         if content or link or image:
 
-            Post.objects.create(user=request.user, content=content, link=link, image=image)
+            Post.objects.create(
+                user=request.user, content=content, link=link, image=image
+            )
 
         return redirect("/dashboard/")
 

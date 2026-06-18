@@ -97,20 +97,12 @@ def register_view(request):
         temp_password = generate_temp_password()
 
         user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=temp_password
+            username=username, email=email, password=temp_password
         )
 
-        StudentProfile.objects.create(
-            user=user,
-            must_change_password=True
-        )
+        StudentProfile.objects.create(user=user, must_change_password=True)
 
-        messages.success(
-            request,
-            f"User created. Temp password: {temp_password}"
-        )
+        messages.success(request, f"User created. Temp password: {temp_password}")
 
         return redirect("/admin-panel/manage/")
 
@@ -125,9 +117,7 @@ def profile_view(request):
 
     profile, created = StudentProfile.objects.get_or_create(user=request.user)
 
-    return render(request, "accounts/profile.html", {
-        "profile": profile
-    })
+    return render(request, "accounts/profile.html", {"profile": profile})
 
 
 # -----------------------------
@@ -137,7 +127,7 @@ def profile_view(request):
 def profile_api(request, user_id):
     user_obj = get_object_or_404(User, id=user_id)
     profile, created = StudentProfile.objects.get_or_create(user=user_obj)
-    
+
     data = {
         "id": user_obj.id,
         "email": user_obj.email,
@@ -147,8 +137,10 @@ def profile_api(request, user_id):
         "number": profile.number,
         "program": profile.program,
         "year": profile.year,
-        "bio": profile.bio if hasattr(profile, 'bio') else "",
-        "profile_picture": profile.profile_picture.url if profile.profile_picture else None,
+        "bio": profile.bio if hasattr(profile, "bio") else "",
+        "profile_picture": (
+            profile.profile_picture.url if profile.profile_picture else None
+        ),
     }
     return JsonResponse(data)
 
@@ -211,9 +203,7 @@ def change_password(request):
     else:
         form = PasswordChangeForm(request.user)
 
-    return render(request, "accounts/change_password.html", {
-        "form": form
-    })
+    return render(request, "accounts/change_password.html", {"form": form})
 
 
 # -----------------------------

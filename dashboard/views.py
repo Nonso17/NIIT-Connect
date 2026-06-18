@@ -70,10 +70,9 @@ def edit_user(request, user_id):
         messages.success(request, "User updated successfully")
         return redirect("/admin-panel/manage/")
 
-    return render(request, "dashboard/edit_user.html", {
-        "user": user,
-        "profile": profile
-    })
+    return render(
+        request, "dashboard/edit_user.html", {"user": user, "profile": profile}
+    )
 
 
 def reset_password(request, user_id):
@@ -86,8 +85,7 @@ def reset_password(request, user_id):
     user.save()
 
     messages.success(
-        request,
-        f"{user.email}'s password reset. New password: {temp_password}"
+        request, f"{user.email}'s password reset. New password: {temp_password}"
     )
 
     return redirect("manage_users")
