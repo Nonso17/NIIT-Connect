@@ -88,3 +88,23 @@
     transform: translateX(4px);
     color: var(--color-primary-blue);
 }
+
+/* Inbox Search Styling */
+#inboxSearch:focus {
+    border-color: var(--color-primary-blue);
+    box-shadow: 0 0 0 3px var(--color-primary-blue-light);
+}
+
+/* Ensure info section can shrink for text truncation to work */
+.info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* Crucial for text-overflow: ellipsis to work in flexbox */
+}
+
+/* Ensure unread messages stand out */
+.inbox-subtext.unread {
+    font-weight: 600;
+    color: var(--color-text-main);
+}

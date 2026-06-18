@@ -76,13 +76,35 @@ def edit_message(request, message_id):
         "edited": message.edited
     })
 
+from django.db.models import Q
+from django.utils import timezone
+
 # ----------------------------
 # INBOX
 # ----------------------------
 @login_required
 def inbox(request):
     users = User.objects.exclude(id=request.user.id)
-    return render(request, "chats/inbox.html", {"users": users})
+    
+    inbox_users = []
+    for u in users:
+        last_message = Message.objects.filter(
+            (Q(sender=request.user) & Q(receiver=u)) | 
+            (Q(sender=u) & Q(receiver=request.user))
+        ).order_by('-timestamp').first()
+        
+        inbox_users.append({
+            'user': u,
+            'last_message': last_message
+        })
+        
+    # Sort by recent message first, users with no messages at the bottom
+    inbox_users.sort(
+        key=lambda x: x['last_message'].timestamp if x['last_message'] else timezone.now().replace(year=1970), 
+        reverse=True
+    )
+
+    return render(request, "chats/inbox.html", {"inbox_users": inbox_users})
 
 
 # ----------------------------
