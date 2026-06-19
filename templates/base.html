@@ -280,9 +280,9 @@
             });
         </script>
         
-        <!-- Global Profile Modal -->
+    <!-- Global Profile Modal -->
         <div id="globalProfileModal" class="modal-overlay" onclick="closeGlobalProfile()">
-            <div class="modal-content" onclick="event.stopPropagation()" style="padding: 0; overflow: auto; max-width: 500px;">
+            <div class="modal-content" onclick="event.stopPropagation()" style="padding: 0; overflow: auto; max-width: 500px; max-height: 80vh;">
                 <div class="modal-header" style="padding: 24px 32px 0 32px;">
                     <h3>Student Profile</h3>
                     <button type="button" class="close-modal" onclick="closeGlobalProfile()">&times;</button>
@@ -316,6 +316,14 @@
                             <div id="globalProfileBio" class="detail-value bio-text">Loading...</div>
                         </div>
                     </div>
+
+                    <!-- Recent Posts in Modal -->
+                    <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--color-border-light);">
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--color-primary-blue-dark); margin-bottom: 12px;">Recent Posts</h4>
+                        <div id="globalProfilePosts" style="max-height: 300px; overflow-y: auto;">
+                            <p style="color: var(--color-text-muted); font-size: 14px;">Loading...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -343,6 +351,29 @@
                             avatarImg.src = data.profile_picture;
                         } else {
                             avatarImg.src = "{% static 'images/default-avatar.png' %}";
+                        }
+
+                        // Render posts
+                        const postsContainer = document.getElementById('globalProfilePosts');
+                        if (data.posts && data.posts.length > 0) {
+                            let postsHtml = '';
+                            data.posts.forEach(function(post) {
+                                postsHtml += '<div style="background: rgba(255,255,255,0.6); border: 1px solid var(--color-border-light); border-radius: 12px; padding: 14px; margin-bottom: 10px;">';
+                                if (post.content) {
+                                    postsHtml += '<p style="font-size: 14px; line-height: 1.5; margin: 0 0 8px 0; color: var(--color-text-main);">' + post.content + '</p>';
+                                }
+                                if (post.image) {
+                                    postsHtml += '<img src="' + post.image + '" style="max-width: 100%; border-radius: 6px; margin-bottom: 8px;" />';
+                                }
+                                if (post.link) {
+                                    postsHtml += '<a href="' + post.link + '" target="_blank" style="color: #3b82f6; font-size: 13px; word-break: break-all;">' + post.link + '</a>';
+                                }
+                                postsHtml += '<div style="font-size: 11px; color: var(--color-text-muted); margin-top: 6px;">' + post.created_at + '</div>';
+                                postsHtml += '</div>';
+                            });
+                            postsContainer.innerHTML = postsHtml;
+                        } else {
+                            postsContainer.innerHTML = '<p style="color: var(--color-text-muted); font-size: 14px; text-align: center; padding: 20px 0;">No posts yet.</p>';
                         }
                     })
                     .catch(error => {

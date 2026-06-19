@@ -1,28 +1,16 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}My Profile | NIIT Connect{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/accounts/profile.css' %}?v=8" />
-{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %}My Profile | NIIT Connect{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts/profile.css' %}?v=8" /> {% endblock %} {% block content %}
 <div class="glass-panel profile-panel">
-    
-    {% if messages %}
-        {% for message in messages %}
-            <div class="message {{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+
+    {% if messages %} {% for message in messages %}
+    <div class="message {{ message.tags }}">{{ message }}</div>
+    {% endfor %} {% endif %}
 
     <div class="profile-header">
         <div class="profile-avatar-wrapper">
             {% if profile.profile_picture %}
-                <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-avatar" />
-            {% else %}
-                <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar" class="profile-avatar" />
-            {% endif %}
+            <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-avatar clickable-avatar" data-profile-id="{{ request.user.id }}" /> {% else %}
+            <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar" class="profile-avatar clickable-avatar" data-profile-id="{{ request.user.id }}" /> {% endif %}
         </div>
         <div class="profile-title">
             <h1 class="user-name">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
@@ -54,6 +42,60 @@
             <div class="detail-value bio-text">{{ profile.bio|default:"No bio available." }}</div>
         </div>
     </div>
+
+    <!-- My Posts Section -->
+    <div class="my-posts-section" style="margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--color-border-light);">
+        <h2 style="font-size: 22px; font-weight: 700; color: var(--color-primary-blue-dark); margin-bottom: 20px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px;">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg> My Posts
+        </h2>
+
+        {% for post in user_posts %}
+        <div class="my-post-card" data-post-id="{{ post.id }}" style="position:relative; background: rgba(255,255,255,0.6); border: 1px solid var(--color-border-light); border-radius: 16px; padding: 20px; margin-bottom: 16px; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+            <button class="icon-btn more-btn" style="position:absolute; right:12px; top:12px; background:none; border:none;"> 
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+            </button>
+            <div class="post-menu" style="display:none; position: absolute; background: white; border: 1px solid var(--color-border-light); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); right: 12px; top:36px; z-index: 40;">
+                <button class="post-menu-item edit-post-btn" data-post-id="{{ post.id }}" style="display:block; padding:8px 12px; width:160px; text-align:left; border:none; background:none; cursor:pointer;">Edit</button>
+                <button class="post-menu-item delete-post-btn" data-post-id="{{ post.id }}" style="display:block; padding:8px 12px; width:160px; text-align:left; border:none; background:none; cursor:pointer; color:var(--color-danger);">Delete</button>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <div style="width: 36px; height: 36px; border-radius: 50%; overflow: hidden; flex-shrink: 0;">
+                    {% if profile.profile_picture %}
+                    <img src="{{ profile.profile_picture.url }}" class="clickable-avatar" data-profile-id="{{ request.user.id }}" style="width:100%; height:100%; object-fit:cover;"> {% else %}
+                    <img src="{% static 'images/default-avatar.png' %}" class="clickable-avatar" data-profile-id="{{ request.user.id }}" style="width:100%; height:100%; object-fit:cover;"> {% endif %}
+                </div>
+                <div>
+                    <strong style="font-size: 14px;">{{ request.user.first_name }} {{ request.user.last_name|default:request.user.username }}</strong>
+                    <div style="font-size: 12px; color: var(--color-text-muted);">{{ post.created_at|timesince }} ago</div>
+                </div>
+            </div>
+            {% if post.content %}
+            <div style="font-size: 15px; line-height: 1.6; color: var(--color-text-main); margin-bottom: 12px;">{{ post.content }}</div>
+            {% endif %} {% if post.image %}
+            <div style="text-align: center; margin-bottom: 12px;">
+                <img src="{{ post.image.url }}" alt="Post image" style="max-width: 100%; border-radius: 8px;">
+            </div>
+            {% endif %} {% if post.link %}
+            <div>
+                <a href="{{ post.link }}" target="_blank" rel="noopener noreferrer" style="color: #3b82f6; word-break: break-all; font-size: 14px;">{{ post.link }}</a>
+            </div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div style="text-align: center; padding: 40px 20px; color: var(--color-text-muted);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.4; margin-bottom: 12px;">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            <p style="font-size: 15px;">You haven't posted anything yet. Go to the feed and share something!</p>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 <!-- Edit Profile Modal Overlay -->
@@ -69,15 +111,13 @@
                 <div class="form-group full-width" style="text-align: center; margin-bottom: 12px;">
                     <div class="profile-image-section">
                         {% if profile.profile_picture %}
-                        <img src="{{ profile.profile_picture.url }}" class="profile-avatar modal-avatar" />
-                        {% else %}
-                        <img src="{% static 'images/default-avatar.png' %}" class="profile-avatar modal-avatar" />
-                        {% endif %}
+                        <img src="{{ profile.profile_picture.url }}" class="profile-avatar modal-avatar clickable-avatar" data-profile-id="{{ request.user.id }}" /> {% else %}
+                        <img src="{% static 'images/default-avatar.png' %}" class="profile-avatar modal-avatar clickable-avatar" data-profile-id="{{ request.user.id }}" /> {% endif %}
                     </div>
                     <label for="profile_picture" style="margin-top: 12px; display: inline-block; cursor: pointer; color: var(--color-primary-blue); font-weight: 500;">Change Picture</label>
                     <input type="file" id="profile_picture" name="profile_picture" style="display: none;" />
                 </div>
-                
+
                 <div class="form-grid">
                     <div class="floating-group">
                         <input type="text" name="first_name" value="{{ request.user.first_name }}" class="floating-input" placeholder=" " />
@@ -110,6 +150,105 @@
 </div>
 
 <script>
+    // Reuse logic from dashboard for edit/delete on profile page
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    document.addEventListener('click', function(e) {
+        document.querySelectorAll('.post-menu').forEach(m => {
+            if (m !== null) m.style.display = 'none';
+        });
+        const moreBtn = e.target.closest('.more-btn');
+        if (moreBtn) {
+            const container = moreBtn.parentElement;
+            const menu = container.querySelector('.post-menu');
+            if (menu) menu.style.display = 'block';
+            e.stopPropagation();
+            return;
+        }
+
+        const editBtn = e.target.closest('.edit-post-btn');
+        if (editBtn) {
+            const postId = editBtn.getAttribute('data-post-id');
+            openEditModalProfile(postId);
+            return;
+        }
+
+        const delBtn = e.target.closest('.delete-post-btn');
+        if (delBtn) {
+            const postId = delBtn.getAttribute('data-post-id');
+            openDeleteModalProfile(postId);
+            return;
+        }
+    });
+
+    let currentEditPostId = null;
+    let currentDeletePostId = null;
+
+    function openEditModalProfile(postId) {
+        currentEditPostId = postId;
+        fetch('/posts/api/' + postId + '/')
+            .then(r => r.json())
+            .then(data => {
+                // reuse dashboard's modal by navigating there if present, else simple prompt fallback
+                if (document.getElementById('editPostModal')) {
+                    document.getElementById('editPostContent').value = data.content || '';
+                    document.getElementById('editPostLink').value = data.link || '';
+                    document.getElementById('editPostModal').style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    const newContent = prompt('Edit post content', data.content || '');
+                    if (newContent !== null) {
+                        fetch('/posts/edit/' + postId + '/', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken')
+                            },
+                            body: new URLSearchParams({
+                                content: newContent
+                            })
+                        }).then(r => r.json()).then(d => {
+                            if (d.success) location.reload();
+                            else alert('Failed to save');
+                        });
+                    }
+                }
+            });
+    }
+
+    function openDeleteModalProfile(postId) {
+        currentDeletePostId = postId;
+        if (document.getElementById('deleteConfirmModal')) {
+            document.getElementById('deleteConfirmModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        } else {
+            if (confirm('Delete this post?')) {
+                fetch('/posts/delete/' + postId + '/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        }
+                    })
+                    .then(r => r.json()).then(d => {
+                        if (d.success) location.reload();
+                        else alert('Failed to delete');
+                    });
+            }
+        }
+    }
+
     function openEditModal() {
         document.getElementById('editProfileModal').classList.add('active');
         document.body.style.overflow = 'hidden';

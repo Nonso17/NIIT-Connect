@@ -9,6 +9,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 
 from .models import StudentProfile
+from posts.models import Post
 
 import random
 import string
@@ -116,8 +117,9 @@ def register_view(request):
 def profile_view(request):
 
     profile, created = StudentProfile.objects.get_or_create(user=request.user)
+    user_posts = Post.objects.filter(user=request.user).order_by("-created_at")
 
-    return render(request, "accounts/profile.html", {"profile": profile})
+    return render(request, "accounts/profile.html", {"profile": profile, "user_posts": user_posts})
 
 
 # -----------------------------
@@ -127,6 +129,16 @@ def profile_view(request):
 def profile_api(request, user_id):
     user_obj = get_object_or_404(User, id=user_id)
     profile, created = StudentProfile.objects.get_or_create(user=user_obj)
+    user_posts = Post.objects.filter(user=user_obj).order_by("-created_at")[:10]
+
+    posts_data = []
+    for post in user_posts:
+        posts_data.append({
+            "content": post.content or "",
+            "image": post.image.url if post.image else None,
+            "link": post.link or "",
+            "created_at": post.created_at.strftime("%b %d, %Y at %I:%M %p"),
+        })
 
     data = {
         "id": user_obj.id,
@@ -141,6 +153,7 @@ def profile_api(request, user_id):
         "profile_picture": (
             profile.profile_picture.url if profile.profile_picture else None
         ),
+        "posts": posts_data,
     }
     return JsonResponse(data)
 
